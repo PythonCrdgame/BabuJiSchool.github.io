@@ -20,7 +20,9 @@ const initialData = {
     { id: "1", title: "Registration Open for Session 2026-27", date: "2026-02-21" },
     { id: "2", title: "Board Examination Schedule Released", date: "2026-02-18" },
     { id: "3", title: "Annual Day Celebration - March 15th", date: "2026-02-10" }
-  ]
+  ],
+  contacts: [],
+  newsletter: []
 };
 
 if (!fs.existsSync(DATA_FILE)) {
@@ -40,6 +42,32 @@ async function startServer() {
     res.json(data);
   });
 
+  app.post("/api/contact", (req, res) => {
+    const { firstName, lastName, email, message } = req.body;
+    const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
+    const newContact = {
+      id: Date.now().toString(),
+      firstName,
+      lastName,
+      email,
+      message,
+      date: new Date().toISOString()
+    };
+    data.contacts.push(newContact);
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    res.json({ success: true });
+  });
+
+  app.post("/api/newsletter", (req, res) => {
+    const { email } = req.body;
+    const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
+    if (!data.newsletter.includes(email)) {
+      data.newsletter.push(email);
+      fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    }
+    res.json({ success: true });
+  });
+
   app.post("/api/gallery", (req, res) => {
     const { url, caption } = req.body;
     const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
@@ -57,6 +85,27 @@ async function startServer() {
     const { id } = req.params;
     const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
     data.gallery = data.gallery.filter((item: { id: string }) => item.id !== id);
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    res.json({ success: true });
+  });
+
+  app.post("/api/announcements", (req, res) => {
+    const { title } = req.body;
+    const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
+    const newItem = {
+      id: Date.now().toString(),
+      title,
+      date: new Date().toISOString().split('T')[0]
+    };
+    data.announcements.unshift(newItem);
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    res.json(newItem);
+  });
+
+  app.delete("/api/announcements/:id", (req, res) => {
+    const { id } = req.params;
+    const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
+    data.announcements = data.announcements.filter((item: { id: string }) => item.id !== id);
     fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
     res.json({ success: true });
   });
