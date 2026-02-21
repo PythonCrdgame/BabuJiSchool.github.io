@@ -25,12 +25,31 @@ import {
   Trash2,
   Lock,
   ChevronRight,
-  School
+  School,
+  Mic,
+  MicOff,
+  Volume2,
+  Bell
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster, toast } from 'react-hot-toast';
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, Modality } from "@google/genai";
 import Markdown from 'react-markdown';
+
+// --- Constants & Fallbacks ---
+const FALLBACK_DATA: SchoolData = {
+  gallery: [
+    { id: "1", url: "https://images.unsplash.com/photo-1523050853063-bd8012fec4c8?auto=format&fit=crop&q=80&w=1000", caption: "Main Academic Block" },
+    { id: "2", url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1000", caption: "Modern Science Laboratory" },
+    { id: "3", url: "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=1000", caption: "Annual Sports Meet 2025" },
+    { id: "4", url: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=1000", caption: "Interactive Classroom Session" },
+  ],
+  announcements: [
+    { id: "1", title: "Registration Open for Session 2026-27", date: "2026-02-21" },
+    { id: "2", title: "Board Examination Schedule Released", date: "2026-02-18" },
+    { id: "3", title: "Annual Day Celebration - March 15th", date: "2026-02-10" }
+  ]
+};
 
 // --- Types ---
 interface GalleryItem {
@@ -211,7 +230,10 @@ const ChatAssistant = () => {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -219,19 +241,144 @@ const ChatAssistant = () => {
     }
   }, [messages]);
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+  const speakText = async (text: string) => {
+    if (!text.trim()) return;
+    
+    try {
+      setIsSpeaking(true);
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+      
+      // Clean text for TTS (remove markdown and limit length)
+      const cleanText = text
+        .replace(/[*_#`~]/g, '') 
+        .replace(/\[.*?\]\(.*?\)/g, '')
+        .replace(/\n+/g, ' ')
+        .trim()
+        .substring(0, 500);
 
-    const userMsg = input;
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash-preview-tts",
+        contents: [{ parts: [{ text: cleanText }] }],
+        config: {
+          responseModalities: [Modality.AUDIO],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: { voiceName: 'Kore' },
+            },
+          },
+        },
+      });
+
+      const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+      if (base64Audio) {
+        // The model returns raw PCM (16-bit, mono, 24kHz). 
+        // We need to add a WAV header to make it playable by the browser.
+        const pcmData = atob(base64Audio);
+        const buffer = new ArrayBuffer(44 + pcmData.length);
+        const view = new DataView(buffer);
+
+        // RIFF identifier
+        view.setUint32(0, 0x52494646, false); // "RIFF"
+        // file length
+        view.setUint32(4, 36 + pcmData.length, true);
+        // RIFF type
+        view.setUint32(8, 0x57415645, false); // "WAVE"
+        // format chunk identifier
+        view.setUint32(12, 0x666d7420, false); // "fmt "
+        // format chunk length
+        view.setUint32(16, 16, true);
+        // sample format (PCM = 1)
+        view.setUint16(20, 1, true);
+        // channel count (Mono = 1)
+        view.setUint16(22, 1, true);
+        // sample rate (24000)
+        view.setUint32(24, 24000, true);
+        // byte rate (sample rate * block align)
+        view.setUint32(28, 24000 * 2, true);
+        // block align (channel count * bytes per sample)
+        view.setUint16(32, 2, true);
+        // bits per sample (16)
+        view.setUint16(34, 16, true);
+        // data chunk identifier
+        view.setUint32(36, 0x64617461, false); // "data"
+        // data chunk length
+        view.setUint32(40, pcmData.length, true);
+
+        for (let i = 0; i < pcmData.length; i++) {
+          view.setUint8(44 + i, pcmData.charCodeAt(i));
+        }
+
+        const blob = new Blob([buffer], { type: 'audio/wav' });
+        const audioUrl = URL.createObjectURL(blob);
+
+        if (audioRef.current) {
+          audioRef.current.src = audioUrl;
+          audioRef.current.onended = () => setIsSpeaking(false);
+          audioRef.current.onerror = () => setIsSpeaking(false);
+          audioRef.current.play().catch(e => console.error("Playback error:", e));
+        } else {
+          const audio = new Audio(audioUrl);
+          audioRef.current = audio;
+          audio.onended = () => setIsSpeaking(false);
+          audio.onerror = () => setIsSpeaking(false);
+          audio.play().catch(e => console.error("Playback error:", e));
+        }
+      } else {
+        setIsSpeaking(false);
+      }
+    } catch (error) {
+      console.error("TTS Error:", error);
+      setIsSpeaking(false);
+    }
+  };
+
+  const stopSpeaking = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    setIsSpeaking(false);
+  };
+
+  const startListening = () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      toast.error("Speech recognition not supported in this browser.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-IN';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => setIsListening(false);
+    recognition.onerror = () => setIsListening(false);
+    
+    recognition.onresult = (event: { results: { [key: number]: { [key: number]: { transcript: string } } } }) => {
+      const transcript = event.results[0][0].transcript;
+      setInput(transcript);
+      handleSend(transcript);
+    };
+
+    recognition.start();
+  };
+
+  const handleSend = async (textOverride?: string) => {
+    const messageToSend = textOverride || input;
+    if (!messageToSend.trim() || isLoading) return;
+
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
+    setMessages(prev => [...prev, { role: 'user', content: messageToSend }]);
     setIsLoading(true);
 
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
-        contents: userMsg,
+        contents: messageToSend,
         config: {
           systemInstruction: `You are a helpful assistant for "Babu Ji International Memorial School". 
           School Details:
@@ -242,11 +389,13 @@ const ChatAssistant = () => {
           - Mission: Nurturing students with knowledge, discipline, and moral values.
           - Vice Principal: Dedicated to creating a supportive environment.
           
-          Answer questions about admissions, location, contact info, and school philosophy in a polite and professional manner. Keep responses concise.`
+          Answer questions about admissions, location, contact info, and school philosophy in a polite and professional manner. Keep responses concise. If the user speaks in Hindi, you can respond in Hindi or Hinglish.`
         }
       });
 
-      setMessages(prev => [...prev, { role: 'ai', content: response.text || "I'm sorry, I couldn't process that." }]);
+      const aiResponse = response.text || "I'm sorry, I couldn't process that.";
+      setMessages(prev => [...prev, { role: 'ai', content: aiResponse }]);
+      speakText(aiResponse);
     } catch (error) {
       console.error(error);
       setMessages(prev => [...prev, { role: 'ai', content: "Sorry, I'm having trouble connecting right now." }]);
@@ -275,9 +424,16 @@ const ChatAssistant = () => {
                   <p className="text-[10px] opacity-80">Online | AI Powered</p>
                 </div>
               </div>
-              <button onClick={() => setIsOpen(false)} className="hover:bg-white/10 p-1 rounded-full">
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center space-x-2">
+                {isSpeaking && (
+                  <button onClick={stopSpeaking} className="hover:bg-white/10 p-1 rounded-full">
+                    <Volume2 className="w-4 h-4 animate-pulse" />
+                  </button>
+                )}
+                <button onClick={() => setIsOpen(false)} className="hover:bg-white/10 p-1 rounded-full">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar bg-slate-50">
@@ -289,6 +445,14 @@ const ChatAssistant = () => {
                       : 'bg-white text-slate-700 border border-slate-200 rounded-tl-none'
                   }`}>
                     <Markdown>{msg.content}</Markdown>
+                    {msg.role === 'ai' && (
+                      <button 
+                        onClick={() => speakText(msg.content)}
+                        className="mt-2 text-[10px] opacity-60 hover:opacity-100 flex items-center"
+                      >
+                        <Volume2 className="w-3 h-3 mr-1" /> Listen
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -305,6 +469,12 @@ const ChatAssistant = () => {
 
             <div className="p-4 bg-white border-t border-slate-100">
               <div className="flex space-x-2">
+                <button 
+                  onClick={startListening}
+                  className={`p-2 rounded-full transition-colors ${isListening ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                >
+                  {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                </button>
                 <input
                   type="text"
                   value={input}
@@ -314,7 +484,7 @@ const ChatAssistant = () => {
                   className="flex-1 bg-slate-100 border-none rounded-full px-4 py-2 text-sm focus:ring-2 focus:ring-emerald-500"
                 />
                 <button 
-                  onClick={handleSend}
+                  onClick={() => handleSend()}
                   disabled={isLoading}
                   className="bg-emerald-600 text-white p-2 rounded-full hover:bg-emerald-700 transition-colors disabled:opacity-50"
                 >
@@ -339,10 +509,19 @@ const ChatAssistant = () => {
 // --- Pages ---
 
 const Home = () => {
-  const [data, setData] = useState<SchoolData | null>(null);
+  const [data, setData] = useState<SchoolData>(FALLBACK_DATA);
 
   useEffect(() => {
-    fetch('/api/data').then(res => res.json()).then(setData);
+    fetch('/api/data')
+      .then(res => {
+        if (!res.ok) throw new Error("API not available");
+        return res.json();
+      })
+      .then(setData)
+      .catch(err => {
+        console.warn("Using fallback data:", err);
+        setData(FALLBACK_DATA);
+      });
   }, []);
 
   return (
@@ -351,7 +530,7 @@ const Home = () => {
       <section className="relative h-[90vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://picsum.photos/seed/school-hero/1920/1080" 
+            src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1920" 
             alt="School Campus" 
             className="w-full h-full object-cover brightness-50"
             referrerPolicy="no-referrer"
@@ -365,14 +544,14 @@ const Home = () => {
             className="max-w-3xl"
           >
             <span className="inline-block bg-emerald-600/90 backdrop-blur-sm text-white px-4 py-1 rounded-full text-xs font-semibold tracking-widest uppercase mb-6">
-              Welcome to Excellence
+              Excellence in Education
             </span>
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
               Babu Ji International <br />
               <span className="italic font-serif text-emerald-400">Memorial School</span>
             </h1>
             <p className="text-lg md:text-xl text-slate-200 mb-10 leading-relaxed">
-              "Education is the most powerful weapon which you can use to change the world."
+              Empowering students with knowledge, discipline, and moral values for a brighter future.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/about" className="bg-emerald-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-emerald-700 transition-all flex items-center group">
@@ -384,6 +563,29 @@ const Home = () => {
               </Link>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Notices & Circulars Section (Inspired by PMS Dhampur) */}
+      <section className="py-12 bg-emerald-600 text-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+          <div className="flex items-center space-x-3 shrink-0 mr-8">
+            <Bell className="w-6 h-6 animate-bounce" />
+            <span className="font-bold uppercase tracking-wider text-sm">Latest Updates:</span>
+          </div>
+          <div className="flex-1 overflow-hidden relative h-6">
+            <motion.div 
+              animate={{ x: ["100%", "-100%"] }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute whitespace-nowrap flex space-x-12"
+            >
+              {data.announcements.map(ann => (
+                <span key={ann.id} className="text-sm font-medium">
+                  • {ann.title} ({ann.date})
+                </span>
+              ))}
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -416,14 +618,14 @@ const Home = () => {
             <div className="relative">
               <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
                 <img 
-                  src="https://picsum.photos/seed/principal/800/1000" 
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800" 
                   alt="Vice Principal" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <div className="absolute -bottom-8 -right-8 bg-white p-8 rounded-3xl shadow-xl max-w-xs hidden md:block">
-                <p className="text-slate-600 italic mb-4">"We aim to achieve excellence in all spheres."</p>
+              <div className="absolute -bottom-8 -right-8 bg-white p-8 rounded-3xl shadow-xl max-w-xs hidden md:block border border-slate-100">
+                <p className="text-slate-600 italic mb-4">"We aim to achieve excellence in all spheres of life."</p>
                 <p className="font-bold text-slate-900">Vice Principal</p>
               </div>
             </div>
@@ -462,7 +664,7 @@ const Home = () => {
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {data?.gallery.slice(0, 3).map((item) => (
+            {data.gallery.slice(0, 3).map((item) => (
               <motion.div 
                 key={item.id}
                 whileHover={{ y: -10 }}
@@ -515,7 +717,7 @@ const About = () => (
         </div>
         <div className="aspect-square rounded-3xl overflow-hidden shadow-xl">
           <img 
-            src="https://picsum.photos/seed/about-img/800/800" 
+            src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800" 
             alt="Students Studying" 
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
@@ -546,10 +748,19 @@ const About = () => (
 );
 
 const Gallery = () => {
-  const [items, setItems] = useState<GalleryItem[]>([]);
+  const [items, setItems] = useState<GalleryItem[]>(FALLBACK_DATA.gallery);
 
   useEffect(() => {
-    fetch('/api/data').then(res => res.json()).then(data => setItems(data.gallery));
+    fetch('/api/data')
+      .then(res => {
+        if (!res.ok) throw new Error("API not available");
+        return res.json();
+      })
+      .then(data => setItems(data.gallery))
+      .catch(err => {
+        console.warn("Using fallback gallery data:", err);
+        setItems(FALLBACK_DATA.gallery);
+      });
   }, []);
 
   return (
