@@ -1,7 +1,7 @@
 {
-  "description": "Babu Ji School - A premium education institute website featuring a home page, gallery, about section, auth portal, and an AI-powered school guide with a real-time voice assistant.",
+  "description": "Babu Ji International Memorial School - A premium education institute website featuring a home page, gallery, about section, admin portal, and an AI-powered school guide.",
   "requestFramePermissions": [
     "microphone"
   ],
-  "name": "App"
+  "name": "Babu Ji International Memorial School"
 }
