@@ -41,8 +41,8 @@ import Markdown from 'react-markdown';
 const FALLBACK_DATA: SchoolData = {
   gallery: [
     { id: "1", url: "https://images.unsplash.com/photo-1523050853063-bd8012fec4c8?auto=format&fit=crop&q=80&w=1000", caption: "Main Academic Block" },
-    { id: "2", url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1000", caption: "Modern Science Laboratory" },
-    { id: "3", url: "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=1000", caption: "Annual Sports Meet 2025" },
+    { id: "2", url: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1000", caption: "Modern Science Laboratory" },
+    { id: "3", url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=1000", caption: "Annual Sports Meet 2025" },
     { id: "4", url: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=1000", caption: "Interactive Classroom Session" },
   ],
   announcements: [
@@ -631,7 +631,7 @@ const Home = () => {
       <section className="relative h-[95vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1920" 
+            src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=1920" 
             alt="Babu Ji International Memorial School Campus" 
             className="w-full h-full object-cover brightness-[0.45] scale-105"
             referrerPolicy="no-referrer"
@@ -656,7 +656,7 @@ const Home = () => {
             <p className="text-xl md:text-2xl text-slate-300 mb-12 leading-relaxed max-w-2xl font-light">
               Empowering the next generation with knowledge, discipline, and the moral courage to change the world.
             </p>
-            <div className="flex flex-wrap gap-6">
+            <div className="flex flex-wrap gap-6 mb-12">
               <Link to="/about" className="bg-emerald-600 text-white px-10 py-5 rounded-full font-bold hover:bg-emerald-700 transition-all flex items-center group shadow-xl shadow-emerald-900/20">
                 Discover Our Story
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -670,7 +670,7 @@ const Home = () => {
       </section>
 
       {/* Notices & Circulars Section */}
-      <section className="py-16 bg-emerald-600 text-white relative z-20 -mt-12 mx-4 sm:mx-8 lg:mx-12 rounded-[2rem] shadow-2xl overflow-hidden">
+      <section className="py-16 bg-emerald-600 text-white relative z-20 mt-12 mx-4 sm:mx-8 lg:mx-12 rounded-[2rem] shadow-2xl overflow-hidden">
         <div className="max-w-7xl mx-auto px-8 flex items-center">
           <div className="flex items-center space-x-4 shrink-0 mr-12 border-r border-white/20 pr-12">
             <div className="bg-white/20 p-2 rounded-xl">
@@ -808,7 +808,7 @@ const Home = () => {
               </div>
               <div className="space-y-6">
                 <div className="aspect-square rounded-[2rem] overflow-hidden shadow-2xl">
-                  <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=800" alt="Lab" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=800" alt="Lab" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </div>
                 <div className="aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl">
                   <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800" alt="Students" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
