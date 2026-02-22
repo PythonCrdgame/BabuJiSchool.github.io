@@ -83,8 +83,8 @@ const Navbar = () => {
         <div className="flex justify-between h-24">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-4 group">
-              <div className="bg-emerald-600 p-2.5 rounded-xl shadow-lg shadow-emerald-600/20 group-hover:scale-110 transition-transform">
-                <School className="text-white w-6 h-6" />
+              <div className="bg-white p-1 rounded-xl shadow-lg group-hover:scale-110 transition-transform overflow-hidden w-12 h-12 flex items-center justify-center border border-slate-100">
+                <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
               </div>
               <div className="flex flex-col">
                 <span className="font-serif text-xl font-bold tracking-tight text-slate-900 leading-none">
@@ -196,9 +196,14 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div className="col-span-1 md:col-span-1">
-            <div className="flex items-center space-x-2 mb-6">
-              <School className="text-emerald-500 w-8 h-8" />
-              <span className="font-serif text-2xl font-bold text-white">Babu Ji</span>
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="bg-white p-1 rounded-lg w-10 h-10 flex items-center justify-center overflow-hidden">
+                <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-white font-bold text-lg leading-none">Babu Ji</span>
+                <span className="text-emerald-500 text-[10px] uppercase tracking-wider font-bold">International</span>
+              </div>
             </div>
             <p className="text-sm leading-relaxed mb-6">
               Nurturing excellence and character since inception. We believe in the power of education to transform lives.
