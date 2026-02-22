@@ -40,7 +40,7 @@ import Markdown from 'react-markdown';
 // --- Constants & Fallbacks ---
 const FALLBACK_DATA: SchoolData = {
   gallery: [
-    { id: "1", url: "https://images.unsplash.com/photo-1523050853063-bd8012fec4c8?auto=format&fit=crop&q=80&w=1000", caption: "Main Academic Block" },
+    { id: "1", url: "https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1000", caption: "Main Academic Block" },
     { id: "2", url: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1000", caption: "Modern Science Laboratory" },
     { id: "3", url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=1000", caption: "Annual Sports Meet 2025" },
     { id: "4", url: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=1000", caption: "Interactive Classroom Session" },
@@ -84,7 +84,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-4 group">
               <div className="bg-white p-1 rounded-xl shadow-lg group-hover:scale-110 transition-transform overflow-hidden w-12 h-12 flex items-center justify-center border border-slate-100">
-                <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                <img src="https://images.unsplash.com/photo-1594312915251-48db9280c8f1?q=80&w=200&auto=format&fit=crop" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
               </div>
               <div className="flex flex-col">
                 <span className="font-serif text-xl font-bold tracking-tight text-slate-900 leading-none">
@@ -198,7 +198,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center space-x-3 mb-6">
               <div className="bg-white p-1 rounded-lg w-10 h-10 flex items-center justify-center overflow-hidden">
-                <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                <img src="https://images.unsplash.com/photo-1594312915251-48db9280c8f1?q=80&w=200&auto=format&fit=crop" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
               </div>
               <div className="flex flex-col">
                 <span className="text-white font-bold text-lg leading-none">Babu Ji</span>
@@ -636,7 +636,7 @@ const Home = () => {
       <section className="relative h-[95vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=1920" 
+            src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1920" 
             alt="Babu Ji International Memorial School Campus" 
             className="w-full h-full object-cover brightness-[0.45] scale-105"
             referrerPolicy="no-referrer"
