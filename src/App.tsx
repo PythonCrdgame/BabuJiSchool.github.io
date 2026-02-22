@@ -292,7 +292,7 @@ const ChatAssistant = () => {
     
     try {
       setIsSpeaking(true);
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+      const ai = new GoogleGenAI({ apiKey: "AIzaSyBQ8qv7ZdgIbkg_XsB53_mLb4bMkzv505Q" });
       
       // Clean text for TTS (remove markdown and limit length)
       const cleanText = text
@@ -421,7 +421,7 @@ const ChatAssistant = () => {
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+      const ai = new GoogleGenAI({ apiKey: "AIzaSyBQ8qv7ZdgIbkg_XsB53_mLb4bMkzv505Q" });
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: messageToSend,
