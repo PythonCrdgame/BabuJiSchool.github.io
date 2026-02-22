@@ -276,6 +276,7 @@ const ChatAssistant = () => {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [voiceLanguage, setVoiceLanguage] = useState('en-IN');
   const [isSpeaking, setIsSpeaking] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -395,7 +396,7 @@ const ChatAssistant = () => {
     }
 
     const recognition = new SpeechRecognition();
-    recognition.lang = 'en-IN';
+    recognition.lang = voiceLanguage;
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
@@ -426,20 +427,29 @@ const ChatAssistant = () => {
         model: "gemini-3-flash-preview",
         contents: messageToSend,
         config: {
-          systemInstruction: `You are a helpful assistant for "Babu Ji International Memorial School". 
+          systemInstruction: `You are a helpful multilingual assistant for "Babu Ji International Memorial School". 
+          
+          Core Capabilities:
+          1. Multilingual Support: Detect the user's language automatically. Respond in the same language the user uses (e.g., Hindi, Urdu, Punjabi, Spanish, French, etc.).
+          2. Translation: If a user asks to translate school information or their own message into another language, provide an accurate translation.
+          3. School Information: Provide details about Babu Ji International Memorial School.
+          
           School Details:
           - Name: Babu Ji International Memorial School
           - Address: Harewali road Sherkot near Police station, District Bijnor Uttar Pradesh, Pin Code 246747
           - Contact: 9759285330, 01344 245031, Inquiry no: 9759709009
           - Motto: "Education is the most powerful weapon which you can use to change the world."
           - Mission: Nurturing students with knowledge, discipline, and moral values.
-          - Vice Principal: Dedicated to creating a supportive environment.
+          - Vice Principal: Mrs. S. Sharma.
           
           Navigation Capabilities:
           If the user wants to go to a specific page, use the navigate_to function.
           Available pages: home, about, gallery, contact, admin.
 
-          Answer questions about admissions, location, contact info, and school philosophy in a polite and professional manner. Keep responses concise. If the user speaks in Hindi, you can respond in Hindi or Hinglish.`,
+          Guidelines:
+          - Be polite, professional, and concise.
+          - If the user speaks in a language other than English, respond in that language.
+          - If the user asks "Translate this to [Language]", perform the translation accurately.`,
           tools: [{
             functionDeclarations: [{
               name: "navigate_to",
@@ -500,7 +510,19 @@ const ChatAssistant = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-sm">School Guide</h3>
-                  <p className="text-[10px] opacity-80">Online | AI Powered</p>
+                  <div className="flex items-center space-x-2">
+                    <p className="text-[10px] opacity-80">Online | AI Powered</p>
+                    <select 
+                      value={voiceLanguage} 
+                      onChange={(e) => setVoiceLanguage(e.target.value)}
+                      className="bg-white/10 text-[10px] border-none rounded px-1 outline-none cursor-pointer hover:bg-white/20 transition-colors"
+                    >
+                      <option value="en-IN" className="text-slate-900">English</option>
+                      <option value="hi-IN" className="text-slate-900">Hindi</option>
+                      <option value="es-ES" className="text-slate-900">Spanish</option>
+                      <option value="fr-FR" className="text-slate-900">French</option>
+                    </select>
+                  </div>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
