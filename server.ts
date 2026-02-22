@@ -38,24 +38,40 @@ async function startServer() {
 
   // API Routes
   app.get("/api/data", (req, res) => {
-    const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
-    res.json(data);
+    console.log("GET /api/data requested");
+    try {
+      if (!fs.existsSync(DATA_FILE)) {
+        console.log("Data file missing, creating with initial data");
+        fs.writeFileSync(DATA_FILE, JSON.stringify(initialData, null, 2));
+      }
+      const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
+      res.json(data);
+    } catch (error) {
+      console.error("Error reading data file:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   });
 
   app.post("/api/contact", (req, res) => {
+    console.log("POST /api/contact requested");
     const { firstName, lastName, email, message } = req.body;
-    const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
-    const newContact = {
-      id: Date.now().toString(),
-      firstName,
-      lastName,
-      email,
-      message,
-      date: new Date().toISOString()
-    };
-    data.contacts.push(newContact);
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-    res.json({ success: true });
+    try {
+      const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
+      const newContact = {
+        id: Date.now().toString(),
+        firstName,
+        lastName,
+        email,
+        message,
+        date: new Date().toISOString()
+      };
+      data.contacts.push(newContact);
+      fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error saving contact:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   });
 
   app.post("/api/newsletter", (req, res) => {
@@ -112,12 +128,18 @@ async function startServer() {
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
+    console.log("Starting server in DEVELOPMENT mode");
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: { 
+        middlewareMode: true,
+        host: '0.0.0.0',
+        port: 3000
+      },
       appType: "spa",
     });
     app.use(vite.middlewares);
   } else {
+    console.log("Starting server in PRODUCTION mode");
     app.use(express.static("dist"));
     app.get("*", (req, res) => {
       res.sendFile(path.join(process.cwd(), "dist", "index.html"));
