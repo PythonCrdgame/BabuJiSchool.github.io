@@ -30,7 +30,8 @@ import {
   Mic,
   MicOff,
   Volume2,
-  Bell
+  Bell,
+  Camera
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster, toast } from 'react-hot-toast';
@@ -40,10 +41,10 @@ import Markdown from 'react-markdown';
 // --- Constants & Fallbacks ---
 const FALLBACK_DATA: SchoolData = {
   gallery: [
-    { id: "1", url: "https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1000", caption: "Main Academic Block" },
-    { id: "2", url: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1000", caption: "Modern Science Laboratory" },
-    { id: "3", url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=1000", caption: "Annual Sports Meet 2025" },
-    { id: "4", url: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=1000", caption: "Interactive Classroom Session" },
+    { id: "1", url: "https://picsum.photos/seed/school1/1000/800", caption: "Main Academic Block" },
+    { id: "2", url: "https://picsum.photos/seed/school2/1000/800", caption: "Modern Science Laboratory" },
+    { id: "3", url: "https://picsum.photos/seed/school3/1000/800", caption: "Annual Sports Meet 2025" },
+    { id: "4", url: "https://picsum.photos/seed/school4/1000/800", caption: "Interactive Classroom Session" },
   ],
   announcements: [
     { id: "1", title: "Registration Open for Session 2026-27", date: "2026-02-21" },
@@ -84,7 +85,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-4 group">
               <div className="bg-white p-1 rounded-xl shadow-lg group-hover:scale-110 transition-transform overflow-hidden w-12 h-12 flex items-center justify-center border border-slate-100">
-                <img src="https://images.unsplash.com/photo-1594312915251-48db9280c8f1?q=80&w=200&auto=format&fit=crop" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                <img src="https://picsum.photos/seed/logo/200/200" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
               </div>
               <div className="flex flex-col">
                 <span className="font-serif text-xl font-bold tracking-tight text-slate-900 leading-none">
@@ -198,7 +199,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center space-x-3 mb-6">
               <div className="bg-white p-1 rounded-lg w-10 h-10 flex items-center justify-center overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1594312915251-48db9280c8f1?q=80&w=200&auto=format&fit=crop" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                <img src="https://picsum.photos/seed/logo/200/200" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
               </div>
               <div className="flex flex-col">
                 <span className="text-white font-bold text-lg leading-none">Babu Ji</span>
@@ -222,6 +223,7 @@ const Footer = () => {
               <li><Link to="/about" className="hover:text-emerald-500 transition-colors">About Us</Link></li>
               <li><Link to="/gallery" className="hover:text-emerald-500 transition-colors">Gallery</Link></li>
               <li><Link to="/contact" className="hover:text-emerald-500 transition-colors">Contact</Link></li>
+              <li><Link to="/admin" className="hover:text-emerald-500 transition-colors opacity-50">Admin Portal</Link></li>
             </ul>
           </div>
 
@@ -636,7 +638,7 @@ const Home = () => {
       <section className="relative h-[95vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1920" 
+            src="https://picsum.photos/seed/campus/1920/1080" 
             alt="Babu Ji International Memorial School Campus" 
             className="w-full h-full object-cover brightness-[0.45] scale-105"
             referrerPolicy="no-referrer"
@@ -729,7 +731,7 @@ const Home = () => {
             <div className="relative">
               <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative">
                 <img 
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800" 
+                  src="https://picsum.photos/seed/principal/800/1000" 
                   alt="Vice Principal" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
@@ -805,18 +807,18 @@ const Home = () => {
             <div className="lg:col-span-7 grid grid-cols-2 gap-6">
               <div className="space-y-6 pt-12">
                 <div className="aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl">
-                  <img src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=800" alt="Campus" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <img src="https://picsum.photos/seed/campus1/800/1000" alt="Campus" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </div>
                 <div className="aspect-square rounded-[2rem] overflow-hidden shadow-2xl">
-                  <img src="https://images.unsplash.com/photo-1523050853063-bd8012fec4c8?auto=format&fit=crop&q=80&w=800" alt="Building" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <img src="https://picsum.photos/seed/building1/800/800" alt="Building" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </div>
               </div>
               <div className="space-y-6">
                 <div className="aspect-square rounded-[2rem] overflow-hidden shadow-2xl">
-                  <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=800" alt="Lab" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <img src="https://picsum.photos/seed/lab1/800/800" alt="Lab" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </div>
                 <div className="aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl">
-                  <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800" alt="Students" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <img src="https://picsum.photos/seed/students1/800/1000" alt="Students" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </div>
               </div>
             </div>
@@ -899,7 +901,7 @@ const About = () => (
         </div>
         <div className="aspect-square rounded-[4rem] overflow-hidden shadow-2xl relative">
           <img 
-            src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=1000" 
+            src="https://picsum.photos/seed/students_study/1000/1000" 
             alt="Students Studying" 
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
