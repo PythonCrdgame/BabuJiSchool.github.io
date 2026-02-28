@@ -71,6 +71,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -85,23 +86,25 @@ const Navbar = () => {
     { name: 'Contact', path: '/contact' },
   ];
 
+  const isScrolled = scrolled || !isHome;
+
   return (
     <nav className={`fixed w-full z-50 transition-all duration-500 ${
-      scrolled ? 'bg-white/80 backdrop-blur-xl py-4 shadow-sm' : 'bg-transparent py-8'
+      isScrolled ? 'bg-white/80 backdrop-blur-xl py-4 shadow-sm' : 'bg-transparent py-8'
     }`}>
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center space-x-4 group">
-            <div className={`transition-all duration-500 ${scrolled ? 'scale-90' : 'scale-100'}`}>
+            <div className={`transition-all duration-500 ${isScrolled ? 'scale-90' : 'scale-100'}`}>
               <div className="bg-slate-900 p-2 rounded-xl shadow-2xl group-hover:rotate-6 transition-transform overflow-hidden w-12 h-12 flex items-center justify-center">
-                <img src="https://images.unsplash.com/photo-1594312915251-48db9280c8f1?q=80&w=200&auto=format&fit=crop" alt="Logo" className="w-full h-full object-contain invert" referrerPolicy="no-referrer" />
+                <img src="https://images.unsplash.com/photo-1594312915251-48db9280c8f1?q=80&w=200&auto=format&fit=crop" alt="Logo" className={`w-full h-full object-contain ${isScrolled ? '' : 'invert'}`} referrerPolicy="no-referrer" />
               </div>
             </div>
             <div className="flex flex-col">
-              <span className={`font-serif text-2xl font-bold tracking-tight leading-none transition-colors ${scrolled ? 'text-slate-900' : 'text-white'}`}>
+              <span className={`font-serif text-2xl font-bold tracking-tight leading-none transition-colors ${isScrolled ? 'text-slate-900' : 'text-white'}`}>
                 Babu Ji
               </span>
-              <span className={`text-[9px] uppercase tracking-[0.4em] font-bold mt-1 transition-colors ${scrolled ? 'text-emerald-600' : 'text-emerald-400'}`}>
+              <span className={`text-[9px] uppercase tracking-[0.4em] font-bold mt-1 transition-colors ${isScrolled ? 'text-emerald-600' : 'text-emerald-400'}`}>
                 International
               </span>
             </div>
@@ -114,15 +117,15 @@ const Navbar = () => {
                 to={link.path}
                 className={`text-[10px] uppercase tracking-[0.2em] font-bold transition-all hover:opacity-100 relative py-2 ${
                   location.pathname === link.path 
-                    ? scrolled ? 'text-emerald-600 opacity-100' : 'text-white opacity-100'
-                    : scrolled ? 'text-slate-500 opacity-60' : 'text-white/60'
+                    ? isScrolled ? 'text-emerald-600 opacity-100' : 'text-white opacity-100'
+                    : isScrolled ? 'text-slate-500 opacity-60' : 'text-white/60'
                 }`}
               >
                 {link.name}
                 {location.pathname === link.path && (
                   <motion.div 
                     layoutId="nav-underline"
-                    className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-full ${scrolled ? 'bg-emerald-600' : 'bg-white'}`}
+                    className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-full ${isScrolled ? 'bg-emerald-600' : 'bg-white'}`}
                   />
                 )}
               </Link>
@@ -130,7 +133,7 @@ const Navbar = () => {
             <Link
               to="/admin"
               className={`px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all shadow-xl ${
-                scrolled 
+                isScrolled 
                   ? 'bg-slate-900 text-white hover:bg-emerald-600 shadow-slate-900/10' 
                   : 'bg-white text-slate-900 hover:bg-emerald-400 shadow-white/10'
               }`}
@@ -142,7 +145,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <button 
               onClick={() => setIsOpen(!isOpen)} 
-              className={`p-2 rounded-xl transition-colors ${scrolled ? 'text-slate-900 bg-slate-100' : 'text-white bg-white/10'}`}
+              className={`p-2 rounded-xl transition-colors ${isScrolled ? 'text-slate-900 bg-slate-100' : 'text-white bg-white/10'}`}
             >
               {isOpen ? <X /> : <Menu />}
             </button>
@@ -157,15 +160,19 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-b border-slate-200 overflow-hidden"
+            className="md:hidden bg-white border-b border-slate-200 overflow-hidden shadow-2xl"
           >
-            <div className="px-4 pt-2 pb-6 space-y-1">
+            <div className="px-6 pt-4 pb-12 space-y-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.path}
                   onClick={() => setIsOpen(false)}
-                  className="block px-3 py-4 text-base font-medium text-slate-600 hover:text-emerald-600 hover:bg-slate-50 rounded-lg"
+                  className={`block px-4 py-4 text-sm font-bold uppercase tracking-widest rounded-2xl transition-all ${
+                    location.pathname === link.path 
+                      ? 'bg-emerald-50 text-emerald-600' 
+                      : 'text-slate-500 hover:bg-slate-50'
+                  }`}
                 >
                   {link.name}
                 </Link>
@@ -173,7 +180,7 @@ const Navbar = () => {
               <Link
                 to="/admin"
                 onClick={() => setIsOpen(false)}
-                className="block px-3 py-4 text-base font-medium text-emerald-600"
+                className="block px-8 py-5 text-center text-xs font-bold uppercase tracking-[0.2em] bg-slate-900 text-white rounded-2xl shadow-xl"
               >
                 Admin Portal
               </Link>
@@ -1317,15 +1324,25 @@ const AdminPortal = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [password, setPassword] = useState('');
   const [data, setData] = useState<SchoolData & { contacts: { id: string; firstName: string; lastName: string; email: string; message: string; date: string }[], newsletter: string[] } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [newUrl, setNewUrl] = useState('');
   const [newCaption, setNewCaption] = useState('');
   const [newAnn, setNewAnn] = useState('');
   const [activeTab, setActiveTab] = useState<'gallery' | 'announcements' | 'contacts' | 'newsletter'>('gallery');
 
   const fetchData = async () => {
-    const res = await fetch('/api/data');
-    const json = await res.json();
-    setData(json);
+    setIsLoading(true);
+    try {
+      const res = await fetch('/api/data');
+      if (!res.ok) throw new Error("Failed to fetch data");
+      const json = await res.json();
+      setData(json);
+    } catch (error) {
+      console.error("Admin Portal Fetch Error:", error);
+      toast.error("Failed to load dashboard data");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -1347,47 +1364,63 @@ const AdminPortal = () => {
   const handleAddGallery = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newUrl) return;
-    const res = await fetch('/api/gallery', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url: newUrl, caption: newCaption })
-    });
-    if (res.ok) {
-      fetchData();
-      setNewUrl('');
-      setNewCaption('');
-      toast.success('Photo added');
+    try {
+      const res = await fetch('/api/gallery', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: newUrl, caption: newCaption })
+      });
+      if (res.ok) {
+        fetchData();
+        setNewUrl('');
+        setNewCaption('');
+        toast.success('Photo added');
+      }
+    } catch {
+      toast.error("Failed to add photo");
     }
   };
 
   const handleAddAnn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newAnn) return;
-    const res = await fetch('/api/announcements', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: newAnn })
-    });
-    if (res.ok) {
-      fetchData();
-      setNewAnn('');
-      toast.success('Announcement added');
+    try {
+      const res = await fetch('/api/announcements', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: newAnn })
+      });
+      if (res.ok) {
+        fetchData();
+        setNewAnn('');
+        toast.success('Announcement added');
+      }
+    } catch {
+      toast.error("Failed to post announcement");
     }
   };
 
   const handleDeleteGallery = async (id: string) => {
-    const res = await fetch(`/api/gallery/${id}`, { method: 'DELETE' });
-    if (res.ok) {
-      fetchData();
-      toast.success('Photo removed');
+    try {
+      const res = await fetch(`/api/gallery/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        fetchData();
+        toast.success('Photo removed');
+      }
+    } catch {
+      toast.error("Failed to remove photo");
     }
   };
 
   const handleDeleteAnn = async (id: string) => {
-    const res = await fetch(`/api/announcements/${id}`, { method: 'DELETE' });
-    if (res.ok) {
-      fetchData();
-      toast.success('Announcement removed');
+    try {
+      const res = await fetch(`/api/announcements/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        fetchData();
+        toast.success('Announcement removed');
+      }
+    } catch {
+      toast.error("Failed to remove announcement");
     }
   };
 
@@ -1427,7 +1460,10 @@ const AdminPortal = () => {
     <div className="pt-32 pb-24 min-h-screen bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
-          <h1 className="text-4xl font-bold text-slate-900">Admin Dashboard</h1>
+          <div className="flex items-center space-x-4">
+            <h1 className="text-4xl font-bold text-slate-900">Admin Dashboard</h1>
+            {isLoading && <div className="w-5 h-5 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />}
+          </div>
           <div className="flex flex-wrap gap-2">
             {[
               { id: 'gallery', label: 'Gallery', icon: Camera },
@@ -1448,6 +1484,9 @@ const AdminPortal = () => {
                 {tab.label}
               </button>
             ))}
+            <button onClick={fetchData} className="px-4 py-2 text-slate-500 hover:text-emerald-600 text-sm font-medium flex items-center">
+              <Plus className="w-4 h-4 rotate-45 mr-1" /> Refresh
+            </button>
             <button onClick={() => setIsLoggedIn(false)} className="px-4 py-2 text-slate-500 hover:text-red-500 text-sm font-medium">Logout</button>
           </div>
         </div>
