@@ -9,12 +9,12 @@ const DATA_FILE = path.join(process.cwd(), "school-data.json");
 // Initial data
 const initialData = {
   gallery: [
-    { id: "1", url: "https://picsum.photos/seed/school1/1000/800", caption: "Main Academic Block" },
-    { id: "2", url: "https://picsum.photos/seed/school2/1000/800", caption: "Modern Science Laboratory" },
-    { id: "3", url: "https://picsum.photos/seed/school3/1000/800", caption: "Annual Sports Meet 2025" },
-    { id: "4", url: "https://picsum.photos/seed/school4/1000/800", caption: "Interactive Classroom Session" },
-    { id: "5", url: "https://picsum.photos/seed/school5/1000/800", caption: "School Library & Resource Center" },
-    { id: "6", url: "https://picsum.photos/seed/school6/1000/800", caption: "Cultural Fest Performances" },
+    { id: "1", url: "https://images.unsplash.com/photo-1523050853063-bd8012fec4c8?auto=format&fit=crop&q=80&w=1000", caption: "Main Academic Block" },
+    { id: "2", url: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1000", caption: "Modern Science Laboratory" },
+    { id: "3", url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=1000", caption: "Annual Sports Meet 2025" },
+    { id: "4", url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1000", caption: "Interactive Classroom Session" },
+    { id: "5", url: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&q=80&w=1000", caption: "School Library & Resource Center" },
+    { id: "6", url: "https://images.unsplash.com/photo-1544161515-4af6ce1ad8b1?auto=format&fit=crop&q=80&w=1000", caption: "Cultural Fest Performances" },
   ],
   announcements: [
     { id: "1", title: "Registration Open for Session 2026-27", date: "2026-02-21" },

@@ -41,13 +41,13 @@ import Markdown from 'react-markdown';
 // --- Constants & Fallbacks ---
 const FALLBACK_DATA: SchoolData = {
   gallery: [
-    { id: "1", url: "https://picsum.photos/seed/school1/1000/800", caption: "Main Academic Block" },
-    { id: "2", url: "https://picsum.photos/seed/school2/1000/800", caption: "Modern Science Laboratory" },
-    { id: "3", url: "https://picsum.photos/seed/school3/1000/800", caption: "Annual Sports Meet 2025" },
-    { id: "4", url: "https://picsum.photos/seed/school4/1000/800", caption: "Interactive Classroom Session" },
+    { id: "1", url: "https://images.unsplash.com/photo-1523050853063-bd8012fec4c8?auto=format&fit=crop&q=80&w=1000", caption: "Main Academic Block" },
+    { id: "2", url: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1000", caption: "Modern Science Laboratory" },
+    { id: "3", url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=1000", caption: "Annual Sports Meet 2025" },
+    { id: "4", url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1000", caption: "Interactive Classroom Session" },
   ],
   announcements: [
-    { id: "1", title: "Registration Open for Session 2026-27", date: "2026-02-21" },
+    { id: "1", title: "Admissions Open for Session 2026-27", date: "2026-02-21" },
     { id: "2", title: "Board Examination Schedule Released", date: "2026-02-18" },
     { id: "3", title: "Annual Day Celebration - March 15th", date: "2026-02-10" }
   ]
@@ -84,8 +84,8 @@ const Navbar = () => {
         <div className="flex justify-between h-24">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-4 group">
-              <div className="bg-white p-1 rounded-xl shadow-lg group-hover:scale-110 transition-transform overflow-hidden w-12 h-12 flex items-center justify-center border border-slate-100">
-                <img src="https://picsum.photos/seed/logo/200/200" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+              <div className="bg-white p-1 rounded-xl shadow-lg group-hover:rotate-6 transition-transform overflow-hidden w-12 h-12 flex items-center justify-center border border-slate-100">
+                <img src="https://images.unsplash.com/photo-1594312915251-48db9280c8f1?q=80&w=200&auto=format&fit=crop" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
               </div>
               <div className="flex flex-col">
                 <span className="font-serif text-xl font-bold tracking-tight text-slate-900 leading-none">
@@ -199,7 +199,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center space-x-3 mb-6">
               <div className="bg-white p-1 rounded-lg w-10 h-10 flex items-center justify-center overflow-hidden">
-                <img src="https://picsum.photos/seed/logo/200/200" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                <img src="https://images.unsplash.com/photo-1594312915251-48db9280c8f1?q=80&w=200&auto=format&fit=crop" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
               </div>
               <div className="flex flex-col">
                 <span className="text-white font-bold text-lg leading-none">Babu Ji</span>
@@ -638,12 +638,12 @@ const Home = () => {
       <section className="relative h-[95vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://picsum.photos/seed/campus/1920/1080" 
+            src="https://images.unsplash.com/photo-1523050853063-bd8012fec4c8?auto=format&fit=crop&q=80&w=1920" 
             alt="Babu Ji International Memorial School Campus" 
             className="w-full h-full object-cover brightness-[0.45] scale-105"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#FDFCFB]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-white" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-white">
           <motion.div
@@ -660,15 +660,15 @@ const Home = () => {
               A Legacy of <br />
               <span className="italic font-serif text-emerald-400">Wisdom & Character</span>
             </h1>
-            <p className="text-xl md:text-2xl text-slate-300 mb-12 leading-relaxed max-w-2xl font-light">
+            <p className="text-xl md:text-2xl text-slate-200 mb-12 leading-relaxed max-w-2xl font-light">
               Empowering the next generation with knowledge, discipline, and the moral courage to change the world.
             </p>
             <div className="flex flex-wrap gap-6 mb-12">
-              <Link to="/about" className="bg-emerald-600 text-white px-10 py-5 rounded-full font-bold hover:bg-emerald-700 transition-all flex items-center group shadow-xl shadow-emerald-900/20">
+              <Link to="/about" className="bg-emerald-600 text-white px-10 py-5 rounded-full font-bold hover:bg-emerald-700 hover:-translate-y-1 transition-all flex items-center group shadow-xl shadow-emerald-900/20">
                 Discover Our Story
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link to="/contact" className="bg-white/5 backdrop-blur-xl border border-white/20 text-white px-10 py-5 rounded-full font-bold hover:bg-white/10 transition-all">
+              <Link to="/contact" className="bg-white/10 backdrop-blur-xl border border-white/20 text-white px-10 py-5 rounded-full font-bold hover:bg-white/20 hover:-translate-y-1 transition-all">
                 Admissions 2026
               </Link>
             </div>
@@ -703,22 +703,64 @@ const Home = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-32">
+      <section className="py-32 bg-white">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-16">
             {[
               { icon: Users, label: 'Students', value: '1200+' },
               { icon: BookOpen, label: 'Courses', value: '25+' },
               { icon: Award, label: 'Awards', value: '50+' },
               { icon: School, label: 'Years', value: '15+' },
             ].map((stat, i) => (
-              <div key={i} className="text-center group">
-                <div className="bg-white w-20 h-20 rounded-[2rem] flex items-center justify-center mx-auto mb-8 text-emerald-600 shadow-sm border border-slate-100 group-hover:scale-110 transition-transform duration-500">
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="text-center group"
+              >
+                <div className="bg-slate-50 w-24 h-24 rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 text-emerald-600 shadow-sm border border-slate-100 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-500 group-hover:-translate-y-2">
                   <stat.icon className="w-10 h-10" />
                 </div>
-                <h3 className="text-4xl font-bold text-slate-900 mb-2 tracking-tight">{stat.value}</h3>
-                <p className="text-slate-500 text-xs uppercase tracking-widest font-semibold">{stat.label}</p>
-              </div>
+                <h3 className="text-5xl font-bold text-slate-900 mb-2 tracking-tight">{stat.value}</h3>
+                <p className="text-slate-500 text-[10px] uppercase tracking-[0.2em] font-bold">{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Facilities */}
+      <section className="py-32 bg-[#F8F7F5]">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+            <div className="max-w-2xl">
+              <span className="text-emerald-600 font-bold uppercase tracking-[0.2em] text-[10px] mb-4 block">World-Class Infrastructure</span>
+              <h2 className="text-5xl font-bold text-slate-900 mb-6 leading-tight">Facilities that Foster <span className="italic font-serif text-emerald-600">Growth</span></h2>
+              <p className="text-slate-500 text-lg font-light leading-relaxed">We provide an environment where technology meets tradition, ensuring our students have access to the best resources for their development.</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { title: 'Digital Classrooms', img: 'https://images.unsplash.com/photo-1509062522246-3755977927d7', desc: 'Interactive smart boards and high-speed connectivity in every room.' },
+              { title: 'Science Labs', img: 'https://images.unsplash.com/photo-1562774053-701939374585', desc: 'Fully equipped laboratories for physics, chemistry, and biology.' },
+              { title: 'Sports Complex', img: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18', desc: 'Professional-grade courts and fields for various indoor and outdoor sports.' },
+            ].map((facility, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.1 }}
+                className="group bg-white rounded-[3rem] overflow-hidden shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-500"
+              >
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img src={facility.img} alt={facility.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" referrerPolicy="no-referrer" />
+                </div>
+                <div className="p-10">
+                  <h4 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-emerald-600 transition-colors">{facility.title}</h4>
+                  <p className="text-slate-500 leading-relaxed font-light">{facility.desc}</p>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -731,7 +773,7 @@ const Home = () => {
             <div className="relative">
               <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative">
                 <img 
-                  src="https://picsum.photos/seed/principal/800/1000" 
+                  src="https://images.unsplash.com/photo-1544161515-4af6ce1ad8b1?auto=format&fit=crop&q=80&w=800" 
                   alt="Vice Principal" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
@@ -807,21 +849,74 @@ const Home = () => {
             <div className="lg:col-span-7 grid grid-cols-2 gap-6">
               <div className="space-y-6 pt-12">
                 <div className="aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl">
-                  <img src="https://picsum.photos/seed/campus1/800/1000" alt="Campus" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=800" alt="Classroom" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </div>
                 <div className="aspect-square rounded-[2rem] overflow-hidden shadow-2xl">
-                  <img src="https://picsum.photos/seed/building1/800/800" alt="Building" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <img src="https://images.unsplash.com/photo-1523050853063-bd8012fec4c8?auto=format&fit=crop&q=80&w=800" alt="Building" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </div>
               </div>
               <div className="space-y-6">
                 <div className="aspect-square rounded-[2rem] overflow-hidden shadow-2xl">
-                  <img src="https://picsum.photos/seed/lab1/800/800" alt="Lab" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=800" alt="Lab" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </div>
                 <div className="aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl">
-                  <img src="https://picsum.photos/seed/students1/800/1000" alt="Students" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&q=80&w=800" alt="Library" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section className="py-32 bg-slate-900 text-white">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="text-center mb-20">
+            <span className="text-emerald-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-4 block">Our Distinction</span>
+            <h2 className="text-5xl font-bold mb-6">Why Choose Babu Ji?</h2>
+            <p className="text-slate-400 text-lg max-w-2xl mx-auto font-light">We provide a holistic environment that balances academic rigor with creative expression and moral grounding.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {[
+              { title: 'Global Curriculum', desc: 'Our teaching methods are aligned with international standards while respecting local values.' },
+              { title: 'Expert Faculty', desc: 'Highly qualified educators dedicated to nurturing every student\'s unique potential.' },
+              { title: 'Holistic Growth', desc: 'Equal emphasis on sports, arts, and character development alongside academics.' },
+            ].map((feature, i) => (
+              <div key={i} className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all group">
+                <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center mb-8 group-hover:rotate-12 transition-transform">
+                  <Award className="w-6 h-6 text-white" />
+                </div>
+                <h4 className="text-2xl font-bold mb-4">{feature.title}</h4>
+                <p className="text-slate-400 leading-relaxed font-light">{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-32 bg-[#FDFCFB]">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="text-center mb-20">
+            <span className="text-emerald-600 font-bold uppercase tracking-[0.2em] text-[10px] mb-4 block">Voices of Our Community</span>
+            <h2 className="text-5xl font-bold text-slate-900">What Parents Say</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {[
+              { name: 'Dr. Amit Verma', role: 'Parent', text: 'The transformation in my son\'s confidence and academic performance has been remarkable since he joined Babu Ji.' },
+              { name: 'Mrs. Priya Singh', role: 'Parent', text: 'A truly international school with a heart. The teachers are incredibly supportive and the facilities are top-notch.' },
+            ].map((testimonial, i) => (
+              <div key={i} className="bg-white p-12 rounded-[3rem] shadow-sm border border-slate-100 relative">
+                <div className="text-emerald-600 mb-6">
+                  <MessageSquare className="w-10 h-10 opacity-20" />
+                </div>
+                <p className="text-slate-600 text-xl italic mb-8 leading-relaxed">"{testimonial.text}"</p>
+                <div>
+                  <p className="font-bold text-slate-900">{testimonial.name}</p>
+                  <p className="text-emerald-600 text-sm font-semibold">{testimonial.role}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -835,16 +930,19 @@ const Home = () => {
               <h2 className="text-5xl font-bold text-slate-900 mb-6">Life at Babu Ji</h2>
               <p className="text-slate-500 text-lg font-light leading-relaxed">Step inside our vibrant campus and witness the moments that define our student experience.</p>
             </div>
-            <Link to="/gallery" className="bg-slate-900 text-white px-8 py-4 rounded-full font-bold hover:bg-emerald-600 transition-all flex items-center group">
+            <Link to="/gallery" className="bg-slate-900 text-white px-10 py-5 rounded-full font-bold hover:bg-emerald-600 hover:-translate-y-1 transition-all flex items-center group shadow-xl shadow-slate-900/10">
               Explore Full Gallery <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-            {data.gallery.slice(0, 3).map((item) => (
+            {data.gallery.slice(0, 3).map((item, i) => (
               <motion.div 
                 key={item.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
                 whileHover={{ y: -15 }}
-                className="group relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl"
+                className="group relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl"
               >
                 <img 
                   src={item.url} 
@@ -852,7 +950,7 @@ const Home = () => {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   referrerPolicy="no-referrer"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-10">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-10">
                   <p className="text-white font-serif text-2xl mb-2">{item.caption}</p>
                   <div className="w-12 h-1 bg-emerald-500 rounded-full" />
                 </div>
@@ -901,7 +999,7 @@ const About = () => (
         </div>
         <div className="aspect-square rounded-[4rem] overflow-hidden shadow-2xl relative">
           <img 
-            src="https://picsum.photos/seed/students_study/1000/1000" 
+            src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1000" 
             alt="Students Studying" 
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
@@ -910,7 +1008,7 @@ const About = () => (
         </div>
       </div>
 
-      <div className="bg-white rounded-[4rem] p-20 shadow-sm border border-slate-100">
+      <div className="bg-white rounded-[4rem] p-20 shadow-sm border border-slate-100 mb-32">
         <h2 className="text-4xl font-bold text-center mb-20">Our Core Values</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-20">
           {[
@@ -928,12 +1026,42 @@ const About = () => (
           ))}
         </div>
       </div>
+
+      <div className="mb-32">
+        <div className="text-center mb-20">
+          <span className="text-emerald-600 font-bold uppercase tracking-[0.2em] text-[10px] mb-4 block">Our Educators</span>
+          <h2 className="text-5xl font-bold text-slate-900">Meet Our Faculty</h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {[
+            { name: 'Mr. R.K. Gupta', role: 'Senior Mathematics', img: 'https://images.unsplash.com/photo-1544161515-4af6ce1ad8b1' },
+            { name: 'Dr. Anjali Verma', role: 'Head of Science', img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2' },
+            { name: 'Mrs. S. Kapoor', role: 'English Literature', img: 'https://images.unsplash.com/photo-1580894732230-2867e638d145' },
+            { name: 'Mr. Vikram Singh', role: 'Physical Education', img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e' },
+          ].map((faculty, i) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.1 }}
+              className="group"
+            >
+              <div className="aspect-[3/4] rounded-[2.5rem] overflow-hidden mb-6 shadow-sm group-hover:shadow-2xl transition-all duration-500">
+                <img src={faculty.img} alt={faculty.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" referrerPolicy="no-referrer" />
+              </div>
+              <h4 className="text-xl font-bold text-slate-900">{faculty.name}</h4>
+              <p className="text-emerald-600 text-sm font-semibold">{faculty.role}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
     </div>
   </div>
 );
 
 const Gallery = () => {
   const [items, setItems] = useState<GalleryItem[]>(FALLBACK_DATA.gallery);
+  const [filter, setFilter] = useState('All');
 
   useEffect(() => {
     fetch('/api/data')
@@ -948,8 +1076,13 @@ const Gallery = () => {
       });
   }, []);
 
+  const categories = ['All', 'Academic', 'Sports', 'Events', 'Campus'];
+  const filteredItems = filter === 'All' 
+    ? items 
+    : items.filter(item => item.caption.toLowerCase().includes(filter.toLowerCase()) || filter === 'Campus');
+
   return (
-    <div className="pt-40 pb-32">
+    <div className="pt-40 pb-32 bg-[#FDFCFB]">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         <div className="text-center mb-24">
           <span className="text-emerald-600 font-bold uppercase tracking-[0.2em] text-[10px] mb-4 block">Visual Archives</span>
@@ -957,29 +1090,52 @@ const Gallery = () => {
           <p className="text-slate-500 text-xl font-light max-w-2xl mx-auto leading-relaxed">Capturing the vibrant moments of joy, discovery, and achievement that define our community.</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-          {items.map((item) => (
-            <motion.div 
-              key={item.id}
-              layout
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              whileHover={{ y: -15 }}
-              className="group aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl relative"
+        <div className="flex flex-wrap justify-center gap-4 mb-20">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setFilter(cat)}
+              className={`px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${
+                filter === cat 
+                  ? 'bg-emerald-600 text-white shadow-xl shadow-emerald-900/20' 
+                  : 'bg-white text-slate-500 hover:bg-slate-50 border border-slate-100'
+              }`}
             >
-              <img 
-                src={item.url} 
-                alt={item.caption} 
-                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-10">
-                <p className="text-white font-serif text-2xl mb-2">{item.caption}</p>
-                <div className="w-12 h-1 bg-emerald-500 rounded-full" />
-              </div>
-            </motion.div>
+              {cat}
+            </button>
           ))}
         </div>
+
+        <motion.div 
+          layout
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12"
+        >
+          <AnimatePresence mode="popLayout">
+            {filteredItems.map((item, i) => (
+              <motion.div 
+                key={item.id}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.5, delay: i * 0.05 }}
+                whileHover={{ y: -15 }}
+                className="group aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative"
+              >
+                <img 
+                  src={item.url} 
+                  alt={item.caption} 
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-10">
+                  <p className="text-white font-serif text-2xl mb-2">{item.caption}</p>
+                  <div className="w-12 h-1 bg-emerald-500 rounded-full" />
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </div>
   );
@@ -1024,33 +1180,37 @@ const Contact = () => {
             <p className="text-slate-500 mb-16 text-xl font-light leading-relaxed">We'd love to hear from you. Whether you have a question about admissions or just want to say hi, our team is here to help.</p>
             
             <div className="space-y-12">
-              <div className="flex items-start space-x-8">
-                <div className="bg-emerald-50 p-5 rounded-[1.5rem] text-emerald-600 shadow-sm">
-                  <MapPin className="w-7 h-7" />
+              {[
+                { icon: MapPin, title: 'Our Location', content: 'Harewali road Sherkot near Police station, District Bijnor Uttar Pradesh, Pin Code 246747' },
+                { icon: Phone, title: 'Phone Numbers', content: '9759285330, 01344 245031', sub: 'Inquiry: 9759709009' },
+                { icon: Mail, title: 'Email Addresses', content: 'info@babujischool.com', sub: 'admissions@babujischool.com' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-start space-x-8 group">
+                  <div className="bg-emerald-50 p-5 rounded-[1.5rem] text-emerald-600 shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all duration-500">
+                    <item.icon className="w-7 h-7" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-xl mb-2">{item.title}</h4>
+                    <p className="text-slate-500 text-base leading-relaxed font-light">{item.content}</p>
+                    {item.sub && <p className="text-emerald-600 text-sm font-semibold mt-1">{item.sub}</p>}
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-bold text-slate-900 text-xl mb-2">Our Location</h4>
-                  <p className="text-slate-500 text-base leading-relaxed font-light">Harewali road Sherkot near Police station, District Bijnor Uttar Pradesh, Pin Code 246747</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-8">
-                <div className="bg-emerald-50 p-5 rounded-[1.5rem] text-emerald-600 shadow-sm">
-                  <Phone className="w-7 h-7" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-900 text-xl mb-2">Phone Numbers</h4>
-                  <p className="text-slate-500 text-base leading-relaxed font-light">9759285330, 01344 245031</p>
-                  <p className="text-emerald-600 text-sm font-semibold mt-1">Inquiry: 9759709009</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-8">
-                <div className="bg-emerald-50 p-5 rounded-[1.5rem] text-emerald-600 shadow-sm">
-                  <Mail className="w-7 h-7" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-900 text-xl mb-2">Email Address</h4>
-                  <p className="text-slate-500 text-base leading-relaxed font-light">info@babujischool.com</p>
-                  <p className="text-slate-500 text-base leading-relaxed font-light">admissions@babujischool.com</p>
+              ))}
+            </div>
+
+            <div className="mt-20 aspect-video rounded-[3rem] overflow-hidden shadow-2xl relative group">
+              <img 
+                src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=1000" 
+                alt="Map Placeholder" 
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-emerald-900/20 mix-blend-multiply group-hover:opacity-0 transition-opacity duration-1000" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-white/20 text-center">
+                  <MapPin className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
+                  <p className="font-bold text-slate-900">Sherkot, Bijnor</p>
+                  <p className="text-xs text-slate-500 uppercase tracking-widest">Find us here</p>
                 </div>
               </div>
             </div>
