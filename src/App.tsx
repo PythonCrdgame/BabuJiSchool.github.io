@@ -41,15 +41,15 @@ import Markdown from 'react-markdown';
 // --- Constants & Fallbacks ---
 const FALLBACK_DATA: SchoolData = {
   gallery: [
-    { id: "1", url: "https://images.unsplash.com/photo-1523050853063-bd8012fec4c8?auto=format&fit=crop&q=80&w=1000", caption: "Main Academic Block" },
-    { id: "2", url: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1000", caption: "Modern Science Laboratory" },
-    { id: "3", url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=1000", caption: "Annual Sports Meet 2025" },
-    { id: "4", url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1000", caption: "Interactive Classroom Session" },
+    { id: "1", url: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1000", caption: "Collaborative Learning Environment" },
+    { id: "2", url: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1000", caption: "Diverse Student Community" },
+    { id: "3", url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=1000", caption: "Athletic Excellence" },
+    { id: "4", url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1000", caption: "Modern Classroom Technology" },
   ],
   announcements: [
-    { id: "1", title: "Admissions Open for Session 2026-27", date: "2026-02-21" },
-    { id: "2", title: "Board Examination Schedule Released", date: "2026-02-18" },
-    { id: "3", title: "Annual Day Celebration - March 15th", date: "2026-02-10" }
+    { id: "1", title: "Admissions Open for Session 2026-27", date: "Feb 21, 2026" },
+    { id: "2", title: "Board Examination Schedule Released", date: "Feb 18, 2026" },
+    { id: "3", title: "Annual Day Celebration - March 15th", date: "Feb 10, 2026" }
   ]
 };
 
@@ -69,7 +69,14 @@ interface SchoolData {
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -79,53 +86,64 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed w-full z-50 bg-white/90 backdrop-blur-xl border-b border-slate-100">
+    <nav className={`fixed w-full z-50 transition-all duration-500 ${
+      scrolled ? 'bg-white/80 backdrop-blur-xl py-4 shadow-sm' : 'bg-transparent py-8'
+    }`}>
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-        <div className="flex justify-between h-24">
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-4 group">
-              <div className="bg-white p-1 rounded-xl shadow-lg group-hover:rotate-6 transition-transform overflow-hidden w-12 h-12 flex items-center justify-center border border-slate-100">
-                <img src="https://images.unsplash.com/photo-1594312915251-48db9280c8f1?q=80&w=200&auto=format&fit=crop" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+        <div className="flex justify-between items-center">
+          <Link to="/" className="flex items-center space-x-4 group">
+            <div className={`transition-all duration-500 ${scrolled ? 'scale-90' : 'scale-100'}`}>
+              <div className="bg-slate-900 p-2 rounded-xl shadow-2xl group-hover:rotate-6 transition-transform overflow-hidden w-12 h-12 flex items-center justify-center">
+                <img src="https://images.unsplash.com/photo-1594312915251-48db9280c8f1?q=80&w=200&auto=format&fit=crop" alt="Logo" className="w-full h-full object-contain invert" referrerPolicy="no-referrer" />
               </div>
-              <div className="flex flex-col">
-                <span className="font-serif text-xl font-bold tracking-tight text-slate-900 leading-none">
-                  Babu Ji International
-                </span>
-                <span className="text-[10px] uppercase tracking-[0.3em] text-emerald-600 font-bold mt-1">
-                  Memorial School
-                </span>
-              </div>
-            </Link>
-          </div>
+            </div>
+            <div className="flex flex-col">
+              <span className={`font-serif text-2xl font-bold tracking-tight leading-none transition-colors ${scrolled ? 'text-slate-900' : 'text-white'}`}>
+                Babu Ji
+              </span>
+              <span className={`text-[9px] uppercase tracking-[0.4em] font-bold mt-1 transition-colors ${scrolled ? 'text-emerald-600' : 'text-emerald-400'}`}>
+                International
+              </span>
+            </div>
+          </Link>
           
-          <div className="hidden md:flex items-center space-x-10">
+          <div className="hidden md:flex items-center space-x-12">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
-                className={`text-xs uppercase tracking-[0.15em] font-bold transition-all hover:text-emerald-600 relative py-2 ${
-                  location.pathname === link.path ? 'text-emerald-600' : 'text-slate-500'
+                className={`text-[10px] uppercase tracking-[0.2em] font-bold transition-all hover:opacity-100 relative py-2 ${
+                  location.pathname === link.path 
+                    ? scrolled ? 'text-emerald-600 opacity-100' : 'text-white opacity-100'
+                    : scrolled ? 'text-slate-500 opacity-60' : 'text-white/60'
                 }`}
               >
                 {link.name}
                 {location.pathname === link.path && (
                   <motion.div 
                     layoutId="nav-underline"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600 rounded-full"
+                    className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-full ${scrolled ? 'bg-emerald-600' : 'bg-white'}`}
                   />
                 )}
               </Link>
             ))}
             <Link
               to="/admin"
-              className="bg-slate-900 text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-xl shadow-slate-900/10"
+              className={`px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all shadow-xl ${
+                scrolled 
+                  ? 'bg-slate-900 text-white hover:bg-emerald-600 shadow-slate-900/10' 
+                  : 'bg-white text-slate-900 hover:bg-emerald-400 shadow-white/10'
+              }`}
             >
               Portal
             </Link>
           </div>
 
           <div className="md:hidden flex items-center">
-            <button onClick={() => setIsOpen(!isOpen)} className="text-slate-900 p-2 bg-slate-100 rounded-xl">
+            <button 
+              onClick={() => setIsOpen(!isOpen)} 
+              className={`p-2 rounded-xl transition-colors ${scrolled ? 'text-slate-900 bg-slate-100' : 'text-white bg-white/10'}`}
+            >
               {isOpen ? <X /> : <Menu />}
             </button>
           </div>
@@ -193,82 +211,91 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-slate-900 text-slate-300 pt-16 pb-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-          <div className="col-span-1 md:col-span-1">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="bg-white p-1 rounded-lg w-10 h-10 flex items-center justify-center overflow-hidden">
+    <footer className="bg-slate-950 text-slate-400 pt-32 pb-16">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 mb-24">
+          <div className="lg:col-span-4">
+            <div className="flex items-center space-x-4 mb-10">
+              <div className="bg-white p-2 rounded-xl w-12 h-12 flex items-center justify-center overflow-hidden shadow-2xl">
                 <img src="https://images.unsplash.com/photo-1594312915251-48db9280c8f1?q=80&w=200&auto=format&fit=crop" alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
               </div>
               <div className="flex flex-col">
-                <span className="text-white font-bold text-lg leading-none">Babu Ji</span>
-                <span className="text-emerald-500 text-[10px] uppercase tracking-wider font-bold">International</span>
+                <span className="text-white font-bold text-2xl tracking-tighter leading-none">Babu Ji</span>
+                <span className="text-emerald-500 text-[9px] uppercase tracking-[0.4em] font-bold mt-1">International</span>
               </div>
             </div>
-            <p className="text-sm leading-relaxed mb-6">
-              Nurturing excellence and character since inception. We believe in the power of education to transform lives.
+            <p className="text-lg leading-relaxed mb-10 font-light">
+              Nurturing excellence and character since inception. We believe in the power of education to transform lives and build global citizens.
             </p>
-            <div className="flex space-x-4">
-              <Facebook className="w-5 h-5 cursor-pointer hover:text-emerald-500 transition-colors" />
-              <Twitter className="w-5 h-5 cursor-pointer hover:text-emerald-500 transition-colors" />
-              <Instagram className="w-5 h-5 cursor-pointer hover:text-emerald-500 transition-colors" />
+            <div className="flex space-x-6">
+              {[Facebook, Twitter, Instagram].map((Icon, i) => (
+                <a key={i} href="#" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-slate-950 transition-all duration-500">
+                  <Icon className="w-5 h-5" />
+                </a>
+              ))}
             </div>
           </div>
 
-          <div>
-            <h4 className="text-white font-semibold mb-6">Quick Links</h4>
-            <ul className="space-y-4 text-sm">
-              <li><Link to="/" className="hover:text-emerald-500 transition-colors">Home</Link></li>
-              <li><Link to="/about" className="hover:text-emerald-500 transition-colors">About Us</Link></li>
-              <li><Link to="/gallery" className="hover:text-emerald-500 transition-colors">Gallery</Link></li>
-              <li><Link to="/contact" className="hover:text-emerald-500 transition-colors">Contact</Link></li>
-              <li><Link to="/admin" className="hover:text-emerald-500 transition-colors opacity-50">Admin Portal</Link></li>
+          <div className="lg:col-span-2">
+            <h4 className="text-white font-bold text-[10px] uppercase tracking-[0.3em] mb-10">Explore</h4>
+            <ul className="space-y-6 text-sm font-light">
+              <li><Link to="/" className="hover:text-emerald-400 transition-colors">Home</Link></li>
+              <li><Link to="/about" className="hover:text-emerald-400 transition-colors">About Us</Link></li>
+              <li><Link to="/gallery" className="hover:text-emerald-400 transition-colors">Gallery</Link></li>
+              <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Contact</Link></li>
+              <li><Link to="/admin" className="hover:text-emerald-400 transition-colors opacity-40">Admin Portal</Link></li>
             </ul>
           </div>
 
-          <div>
-            <h4 className="text-white font-semibold mb-6">Contact Info</h4>
-            <ul className="space-y-4 text-sm">
-              <li className="flex items-start space-x-3">
+          <div className="lg:col-span-3">
+            <h4 className="text-white font-bold text-[10px] uppercase tracking-[0.3em] mb-10">Contact</h4>
+            <ul className="space-y-8 text-sm font-light">
+              <li className="flex items-start space-x-4">
                 <MapPin className="w-5 h-5 text-emerald-500 shrink-0" />
-                <span>Harewali road Sherkot near Police station, District Bijnor, UP 246747</span>
+                <span className="leading-relaxed">Harewali road Sherkot near Police station, District Bijnor, UP 246747</span>
               </li>
-              <li className="flex items-center space-x-3">
+              <li className="flex items-center space-x-4">
                 <Phone className="w-5 h-5 text-emerald-500 shrink-0" />
-                <span>+91 9759285330, 01344 245031</span>
+                <span>+91 9759285330</span>
               </li>
-              <li className="flex items-center space-x-3">
+              <li className="flex items-center space-x-4">
                 <Mail className="w-5 h-5 text-emerald-500 shrink-0" />
                 <span>info@babujischool.com</span>
               </li>
             </ul>
           </div>
 
-          <div>
-            <h4 className="text-white font-semibold mb-6">Newsletter</h4>
-            <p className="text-sm mb-4">Stay updated with our latest news and events.</p>
-            <form onSubmit={handleNewsletter} className="flex">
+          <div className="lg:col-span-3">
+            <h4 className="text-white font-bold text-[10px] uppercase tracking-[0.3em] mb-10">Newsletter</h4>
+            <p className="text-sm mb-8 font-light leading-relaxed">Stay updated with our latest news and events.</p>
+            <form onSubmit={handleNewsletter} className="relative">
               <input 
                 type="email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email address" 
                 required
-                className="bg-slate-800 border-none rounded-l-lg px-4 py-2 w-full text-sm focus:ring-1 focus:ring-emerald-500"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
               />
               <button 
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-emerald-600 text-white px-4 py-2 rounded-r-lg hover:bg-emerald-700 transition-colors disabled:opacity-50"
+                className="absolute right-2 top-2 bottom-2 bg-emerald-600 text-white px-6 rounded-xl hover:bg-emerald-500 transition-all disabled:opacity-50"
               >
-                <Send className="w-4 h-4" />
+                <ArrowRight className="w-5 h-5" />
               </button>
             </form>
           </div>
         </div>
-        <div className="border-t border-slate-800 pt-8 text-center text-xs">
-          <p>&copy; {new Date().getFullYear()} Babu Ji International Memorial School. All rights reserved.</p>
+        
+        <div className="pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+          <p className="text-[10px] uppercase tracking-widest font-bold opacity-40">
+            © 2026 Babu Ji International Memorial School. All Rights Reserved.
+          </p>
+          <div className="flex space-x-8 text-[10px] uppercase tracking-widest font-bold opacity-40">
+            <a href="#" className="hover:opacity-100 transition-opacity">Privacy Policy</a>
+            <a href="#" className="hover:opacity-100 transition-opacity">Terms of Service</a>
+          </div>
         </div>
       </div>
     </footer>
@@ -633,74 +660,99 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="pt-20">
-      {/* Hero Section */}
-      <section className="relative h-[95vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1523050853063-bd8012fec4c8?auto=format&fit=crop&q=80&w=1920" 
-            alt="Babu Ji International Memorial School Campus" 
-            className="w-full h-full object-cover brightness-[0.45] scale-105"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-white" />
-        </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-white">
+    <div className="bg-white">
+      {/* Hero Section - Split Layout */}
+      <section className="relative min-h-screen flex flex-col lg:flex-row items-stretch overflow-hidden">
+        <div className="lg:w-1/2 relative bg-slate-950 flex flex-col justify-center px-6 sm:px-12 lg:px-24 py-32 lg:py-0">
+          <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1),transparent_70%)]" />
+          </div>
+          
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="max-w-4xl"
+            className="relative z-10"
           >
-            <span className="inline-flex items-center bg-emerald-600/20 backdrop-blur-md border border-emerald-500/30 text-emerald-400 px-5 py-1.5 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase mb-8">
-              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2 animate-pulse" />
-              Excellence in Education
+            <span className="inline-flex items-center text-emerald-400 text-[10px] font-bold tracking-[0.4em] uppercase mb-8">
+              <span className="w-8 h-[1px] bg-emerald-500 mr-4" />
+              Est. 2010
             </span>
-            <h1 className="text-6xl md:text-8xl font-bold mb-8 leading-[0.95] tracking-tight">
-              A Legacy of <br />
-              <span className="italic font-serif text-emerald-400">Wisdom & Character</span>
+            <h1 className="text-6xl md:text-8xl font-bold text-white mb-8 leading-[0.9] tracking-tighter">
+              Nurturing <br />
+              <span className="italic font-serif text-emerald-400">Brilliance</span> <br />
+              Together.
             </h1>
-            <p className="text-xl md:text-2xl text-slate-200 mb-12 leading-relaxed max-w-2xl font-light">
-              Empowering the next generation with knowledge, discipline, and the moral courage to change the world.
+            <p className="text-lg md:text-xl text-slate-400 mb-12 leading-relaxed max-w-lg font-light">
+              Babu Ji International Memorial School is a sanctuary of learning where diverse perspectives meet academic excellence.
             </p>
-            <div className="flex flex-wrap gap-6 mb-12">
-              <Link to="/about" className="bg-emerald-600 text-white px-10 py-5 rounded-full font-bold hover:bg-emerald-700 hover:-translate-y-1 transition-all flex items-center group shadow-xl shadow-emerald-900/20">
-                Discover Our Story
+            <div className="flex flex-wrap gap-6">
+              <Link to="/about" className="bg-emerald-600 text-white px-10 py-5 rounded-full font-bold hover:bg-emerald-500 hover:-translate-y-1 transition-all flex items-center group shadow-2xl shadow-emerald-900/20">
+                Our Philosophy
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link to="/contact" className="bg-white/10 backdrop-blur-xl border border-white/20 text-white px-10 py-5 rounded-full font-bold hover:bg-white/20 hover:-translate-y-1 transition-all">
-                Admissions 2026
+              <Link to="/contact" className="border border-white/20 text-white px-10 py-5 rounded-full font-bold hover:bg-white/10 hover:-translate-y-1 transition-all">
+                Apply Now
               </Link>
             </div>
           </motion.div>
+          
+          <div className="absolute bottom-12 left-6 sm:left-12 lg:left-24 flex items-center space-x-12 opacity-40">
+            <div className="flex flex-col">
+              <span className="text-white font-bold text-2xl tracking-tighter">1200+</span>
+              <span className="text-slate-500 text-[8px] uppercase tracking-widest font-bold">Students</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-white font-bold text-2xl tracking-tighter">50+</span>
+              <span className="text-slate-500 text-[8px] uppercase tracking-widest font-bold">Faculty</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="lg:w-1/2 relative min-h-[50vh] lg:min-h-screen">
+          <motion.div 
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.5 }}
+            className="absolute inset-0"
+          >
+            <img 
+              src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1920" 
+              alt="Students in classroom" 
+              className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/40 to-transparent lg:hidden" />
+          </motion.div>
+          
+          <div className="absolute bottom-12 right-12 hidden lg:block">
+            <div className="bg-white/10 backdrop-blur-2xl border border-white/20 p-8 rounded-3xl max-w-xs">
+              <p className="text-white text-sm italic leading-relaxed mb-4">
+                "The diversity here isn't just celebrated; it's our greatest strength in building global citizens."
+              </p>
+              <p className="text-emerald-400 text-[10px] font-bold uppercase tracking-widest">Student Council 2026</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Notices & Circulars Section */}
-      <section className="py-16 bg-emerald-600 text-white relative z-20 mt-12 mx-4 sm:mx-8 lg:mx-12 rounded-[2rem] shadow-2xl overflow-hidden">
-        <div className="max-w-7xl mx-auto px-8 flex items-center">
-          <div className="flex items-center space-x-4 shrink-0 mr-12 border-r border-white/20 pr-12">
-            <div className="bg-white/20 p-2 rounded-xl">
-              <Bell className="w-6 h-6 animate-bounce" />
-            </div>
-            <span className="font-bold uppercase tracking-[0.15em] text-xs">Announcements</span>
-          </div>
-          <div className="flex-1 overflow-hidden relative h-8">
-            <motion.div 
-              animate={{ x: ["100%", "-100%"] }}
-              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-              className="absolute whitespace-nowrap flex items-center space-x-24"
-            >
-              {data.announcements.map(ann => (
-                <span key={ann.id} className="text-sm font-medium flex items-center">
-                  <span className="w-2 h-2 bg-emerald-400 rounded-full mr-3" />
-                  {ann.title} <span className="opacity-60 ml-2">[{ann.date}]</span>
-                </span>
-              ))}
-            </motion.div>
-          </div>
+      {/* Announcements Bar - Minimal */}
+      <div className="bg-slate-50 py-6 border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 overflow-hidden relative h-6">
+          <motion.div 
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+            className="absolute whitespace-nowrap flex items-center space-x-24"
+          >
+            {[...data.announcements, ...data.announcements].map((ann, i) => (
+              <span key={i} className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400 flex items-center">
+                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-4" />
+                {ann.title} — {ann.date}
+              </span>
+            ))}
+          </motion.div>
         </div>
-      </section>
+      </div>
 
       {/* Stats Section */}
       <section className="py-32 bg-white">
@@ -766,51 +818,52 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Principal's Message */}
-      <section className="py-32 bg-[#F8F7F5]">
+      {/* Principal's Message - Professional Editorial */}
+      <section className="py-32 bg-white">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-            <div className="relative">
-              <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative">
+          <div className="flex flex-col lg:flex-row gap-24 items-center">
+            <div className="lg:w-1/2 relative">
+              <div className="aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl relative">
                 <img 
-                  src="https://images.unsplash.com/photo-1544161515-4af6ce1ad8b1?auto=format&fit=crop&q=80&w=800" 
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800" 
                   alt="Vice Principal" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-emerald-900/10 mix-blend-multiply" />
               </div>
               <motion.div 
-                initial={{ x: 50, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                className="absolute -bottom-12 -right-12 bg-white p-10 rounded-[2.5rem] shadow-2xl max-w-xs hidden md:block border border-slate-100"
+                initial={{ y: 40, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                className="absolute -bottom-12 -right-12 bg-slate-950 p-10 rounded-[2rem] shadow-2xl max-w-xs hidden md:block border border-white/10"
               >
-                <div className="text-emerald-600 mb-4">
+                <div className="text-emerald-400 mb-6">
                   <MessageSquare className="w-8 h-8" />
                 </div>
-                <p className="text-slate-600 italic mb-6 leading-relaxed">"We don't just teach subjects; we inspire souls to reach their highest potential."</p>
+                <p className="text-slate-400 italic mb-6 leading-relaxed text-sm">"We don't just teach subjects; we inspire souls to reach their highest potential."</p>
                 <div>
-                  <p className="font-bold text-slate-900 text-lg">Mrs. S. Sharma</p>
-                  <p className="text-emerald-600 text-sm font-semibold uppercase tracking-wider">Vice Principal</p>
+                  <p className="font-bold text-white text-lg tracking-tighter">Mrs. S. Sharma</p>
+                  <p className="text-emerald-500 text-[9px] uppercase tracking-widest font-bold">Vice Principal</p>
                 </div>
               </motion.div>
             </div>
-            <div className="lg:pl-12">
-              <span className="text-emerald-600 font-bold uppercase tracking-[0.2em] text-[10px] mb-6 block">Leadership Message</span>
-              <h2 className="text-5xl md:text-6xl font-bold mb-10 text-slate-900 leading-tight">
+            <div className="lg:w-1/2">
+              <span className="text-emerald-600 font-bold uppercase tracking-[0.4em] text-[9px] mb-8 block">Leadership Perspective</span>
+              <h2 className="text-5xl md:text-7xl font-bold mb-10 text-slate-900 leading-[1.1] tracking-tighter">
                 Nurturing the <br />
-                <span className="italic font-serif text-emerald-600">Leaders of Tomorrow</span>
+                <span className="italic font-serif text-emerald-600">Global Citizens</span> <br />
+                of Tomorrow.
               </h2>
-              <div className="space-y-8 text-slate-600 text-lg leading-relaxed font-light">
+              <div className="space-y-8 text-slate-500 text-lg leading-relaxed font-light">
                 <p>
                   At Babu Ji International Memorial School, we believe that education is a journey of discovery. Our curriculum is designed to challenge the mind while grounding the heart in values that last a lifetime.
                 </p>
                 <p>
                   We provide a sanctuary for learning where every student is seen, heard, and encouraged to excel in their unique path.
                 </p>
-                <div className="pt-8 border-t border-slate-200">
-                  <p className="font-serif text-2xl italic text-slate-900 mb-2">"Education is the most powerful weapon which you can use to change the world."</p>
-                  <p className="text-slate-400 text-sm">— Nelson Mandela</p>
+                <div className="pt-12 border-t border-slate-100">
+                  <p className="font-serif text-3xl italic text-slate-900 mb-4 leading-tight">"Education is the most powerful weapon which you can use to change the world."</p>
+                  <p className="text-slate-400 text-xs uppercase tracking-widest font-bold">— Nelson Mandela</p>
                 </div>
               </div>
             </div>
@@ -818,102 +871,100 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Campus Life Section */}
-      <section className="py-32 bg-white overflow-hidden">
+      {/* Campus Life - Grid Layout */}
+      <section className="py-32 bg-slate-50">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-            <div className="lg:col-span-5">
-              <span className="text-emerald-600 font-bold uppercase tracking-[0.2em] text-[10px] mb-6 block">Our Environment</span>
-              <h2 className="text-5xl font-bold text-slate-900 mb-8 leading-tight">A Campus Designed for <span className="italic font-serif text-emerald-600">Inspiration</span></h2>
-              <p className="text-slate-600 text-lg leading-relaxed mb-10 font-light">
-                Our state-of-the-art campus provides the perfect backdrop for academic excellence and personal growth. From modern laboratories to serene study spaces, every corner is crafted to inspire.
+          <div className="flex flex-col lg:flex-row justify-between items-end mb-24 gap-8">
+            <div className="max-w-2xl">
+              <span className="text-emerald-600 font-bold uppercase tracking-[0.4em] text-[9px] mb-6 block">Our Environment</span>
+              <h2 className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight tracking-tighter">A Campus Designed for <span className="italic font-serif text-emerald-600">Inspiration</span></h2>
+            </div>
+            <p className="text-slate-500 text-lg max-w-sm font-light leading-relaxed">
+              Every corner of our campus is crafted to foster curiosity, collaboration, and personal growth.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-8">
+              <div className="aspect-video rounded-[2rem] overflow-hidden shadow-2xl group">
+                <img 
+                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1200" 
+                  alt="Students collaborating" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            </div>
+            <div className="lg:col-span-4 flex flex-col gap-8">
+              <div className="flex-1 bg-white p-10 rounded-[2rem] shadow-sm border border-slate-100 flex flex-col justify-center">
+                <h4 className="text-2xl font-bold text-slate-900 mb-4 tracking-tighter">Smart Classrooms</h4>
+                <p className="text-slate-500 text-sm font-light leading-relaxed">Equipped with the latest interactive technology to make learning immersive.</p>
+              </div>
+              <div className="flex-1 bg-emerald-600 p-10 rounded-[2rem] shadow-2xl shadow-emerald-900/20 flex flex-col justify-center text-white">
+                <h4 className="text-2xl font-bold mb-4 tracking-tighter">Advanced Labs</h4>
+                <p className="text-emerald-100 text-sm font-light leading-relaxed">Hands-on learning in science and computer labs with professional guidance.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us - Professional Minimal */}
+      <section className="py-32 bg-slate-950 text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,rgba(16,185,129,0.2),transparent_70%)]" />
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
+          <div className="flex flex-col lg:flex-row gap-24">
+            <div className="lg:w-1/3">
+              <span className="text-emerald-400 font-bold uppercase tracking-[0.4em] text-[9px] mb-8 block">Our Distinction</span>
+              <h2 className="text-5xl font-bold mb-8 leading-tight tracking-tighter">The Babu Ji <br /> Advantage.</h2>
+              <p className="text-slate-400 text-lg font-light leading-relaxed">
+                We provide a holistic environment that balances academic rigor with creative expression and moral grounding.
               </p>
-              <ul className="space-y-6">
-                {[
-                  { title: 'Smart Classrooms', desc: 'Equipped with the latest interactive technology.' },
-                  { title: 'Advanced Labs', desc: 'Hands-on learning in science and computer labs.' },
-                  { title: 'Lush Greenery', desc: 'A peaceful environment close to nature.' },
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start space-x-4">
-                    <div className="bg-emerald-100 p-1.5 rounded-lg text-emerald-600 mt-1">
-                      <ChevronRight className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-slate-900">{item.title}</h4>
-                      <p className="text-slate-500 text-sm">{item.desc}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
             </div>
-            <div className="lg:col-span-7 grid grid-cols-2 gap-6">
-              <div className="space-y-6 pt-12">
-                <div className="aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl">
-                  <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=800" alt="Classroom" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+            <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-12">
+              {[
+                { title: 'Global Curriculum', desc: 'Our teaching methods are aligned with international standards while respecting local values.' },
+                { title: 'Expert Faculty', desc: 'Highly qualified educators dedicated to nurturing every student\'s unique potential.' },
+                { title: 'Holistic Growth', desc: 'Equal emphasis on sports, arts, and character development alongside academics.' },
+                { title: 'Modern Facilities', desc: 'State-of-the-art labs and digital classrooms designed for the 21st century.' },
+              ].map((feature, i) => (
+                <div key={i} className="group">
+                  <div className="w-12 h-[1px] bg-emerald-500 mb-8 group-hover:w-24 transition-all duration-500" />
+                  <h4 className="text-2xl font-bold mb-4 tracking-tighter">{feature.title}</h4>
+                  <p className="text-slate-500 text-sm leading-relaxed font-light">{feature.desc}</p>
                 </div>
-                <div className="aspect-square rounded-[2rem] overflow-hidden shadow-2xl">
-                  <img src="https://images.unsplash.com/photo-1523050853063-bd8012fec4c8?auto=format&fit=crop&q=80&w=800" alt="Building" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                </div>
-              </div>
-              <div className="space-y-6">
-                <div className="aspect-square rounded-[2rem] overflow-hidden shadow-2xl">
-                  <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=800" alt="Lab" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                </div>
-                <div className="aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl">
-                  <img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&q=80&w=800" alt="Library" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
-      <section className="py-32 bg-slate-900 text-white">
+      {/* Testimonials - Clean Grid */}
+      <section className="py-32 bg-white">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="text-center mb-20">
-            <span className="text-emerald-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-4 block">Our Distinction</span>
-            <h2 className="text-5xl font-bold mb-6">Why Choose Babu Ji?</h2>
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto font-light">We provide a holistic environment that balances academic rigor with creative expression and moral grounding.</p>
+          <div className="text-center mb-24">
+            <span className="text-emerald-600 font-bold uppercase tracking-[0.4em] text-[9px] mb-6 block">Community Voices</span>
+            <h2 className="text-5xl md:text-6xl font-bold text-slate-900 tracking-tighter">Trusted by Families.</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {[
-              { title: 'Global Curriculum', desc: 'Our teaching methods are aligned with international standards while respecting local values.' },
-              { title: 'Expert Faculty', desc: 'Highly qualified educators dedicated to nurturing every student\'s unique potential.' },
-              { title: 'Holistic Growth', desc: 'Equal emphasis on sports, arts, and character development alongside academics.' },
-            ].map((feature, i) => (
-              <div key={i} className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all group">
-                <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center mb-8 group-hover:rotate-12 transition-transform">
-                  <Award className="w-6 h-6 text-white" />
-                </div>
-                <h4 className="text-2xl font-bold mb-4">{feature.title}</h4>
-                <p className="text-slate-400 leading-relaxed font-light">{feature.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-32 bg-[#FDFCFB]">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="text-center mb-20">
-            <span className="text-emerald-600 font-bold uppercase tracking-[0.2em] text-[10px] mb-4 block">Voices of Our Community</span>
-            <h2 className="text-5xl font-bold text-slate-900">What Parents Say</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             {[
               { name: 'Dr. Amit Verma', role: 'Parent', text: 'The transformation in my son\'s confidence and academic performance has been remarkable since he joined Babu Ji.' },
               { name: 'Mrs. Priya Singh', role: 'Parent', text: 'A truly international school with a heart. The teachers are incredibly supportive and the facilities are top-notch.' },
             ].map((testimonial, i) => (
-              <div key={i} className="bg-white p-12 rounded-[3rem] shadow-sm border border-slate-100 relative">
-                <div className="text-emerald-600 mb-6">
-                  <MessageSquare className="w-10 h-10 opacity-20" />
+              <div key={i} className="flex flex-col">
+                <div className="text-emerald-600 mb-8">
+                  <MessageSquare className="w-12 h-12 opacity-10" />
                 </div>
-                <p className="text-slate-600 text-xl italic mb-8 leading-relaxed">"{testimonial.text}"</p>
-                <div>
-                  <p className="font-bold text-slate-900">{testimonial.name}</p>
-                  <p className="text-emerald-600 text-sm font-semibold">{testimonial.role}</p>
+                <p className="text-slate-600 text-2xl font-serif italic mb-10 leading-relaxed">"{testimonial.text}"</p>
+                <div className="flex items-center space-x-4">
+                  <div className="w-10 h-10 bg-slate-100 rounded-full" />
+                  <div>
+                    <p className="font-bold text-slate-900 text-sm tracking-tight">{testimonial.name}</p>
+                    <p className="text-emerald-600 text-[10px] font-bold uppercase tracking-widest">{testimonial.role}</p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -964,47 +1015,42 @@ const Home = () => {
 };
 
 const About = () => (
-  <div className="pt-40 pb-32">
+  <div className="pt-40 pb-32 bg-white">
     <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-      <div className="text-center mb-24">
-        <span className="text-emerald-600 font-bold uppercase tracking-[0.2em] text-[10px] mb-4 block">Our Heritage</span>
-        <h1 className="text-6xl md:text-7xl font-bold text-slate-900 mb-8">About Our School</h1>
-        <p className="text-slate-500 text-xl font-light max-w-2xl mx-auto leading-relaxed">Founded with a vision to provide quality education and character building for the leaders of tomorrow.</p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 mb-32 items-center">
-        <div className="space-y-12">
-          <div className="bg-white p-12 rounded-[3rem] border border-slate-100 shadow-sm hover:shadow-xl transition-shadow">
-            <h3 className="text-3xl font-bold text-slate-900 mb-6 flex items-center">
-              <div className="bg-emerald-100 p-2 rounded-xl mr-4">
-                <BookOpen className="w-6 h-6 text-emerald-600" />
-              </div>
-              Our Vision
-            </h3>
-            <p className="text-slate-600 text-lg leading-relaxed font-light">
-              To be a global leader in education, fostering innovation, integrity, and excellence in every student. We envision a community where every child is empowered to design their own future.
-            </p>
-          </div>
-          <div className="bg-slate-900 p-12 rounded-[3rem] text-white shadow-2xl">
-            <h3 className="text-3xl font-bold mb-6 flex items-center">
-              <div className="bg-emerald-600 p-2 rounded-xl mr-4">
-                <Award className="w-6 h-6 text-white" />
-              </div>
-              Our Mission
-            </h3>
-            <p className="text-slate-300 text-lg leading-relaxed font-light">
-              To provide a nurturing environment that empowers students to achieve their full potential and become responsible global citizens through academic excellence and strong moral values.
-            </p>
+      <div className="flex flex-col lg:flex-row gap-24 items-center mb-32">
+        <div className="lg:w-1/2">
+          <span className="text-emerald-600 font-bold uppercase tracking-[0.4em] text-[9px] mb-8 block">Our Identity</span>
+          <h1 className="text-6xl md:text-8xl font-bold text-slate-900 mb-10 leading-[0.9] tracking-tighter">
+            A Legacy of <br />
+            <span className="italic font-serif text-emerald-600">Excellence.</span>
+          </h1>
+          <p className="text-slate-500 text-xl font-light leading-relaxed mb-12">
+            Founded on the principles of integrity and innovation, Babu Ji International Memorial School has been a beacon of quality education for over a decade.
+          </p>
+          <div className="grid grid-cols-2 gap-12">
+            <div>
+              <h4 className="text-emerald-600 font-bold text-sm uppercase tracking-widest mb-4">Our Vision</h4>
+              <p className="text-slate-500 text-sm leading-relaxed font-light">To be a global leader in education, nurturing students who are academically brilliant and morally grounded.</p>
+            </div>
+            <div>
+              <h4 className="text-emerald-600 font-bold text-sm uppercase tracking-widest mb-4">Our Mission</h4>
+              <p className="text-slate-500 text-sm leading-relaxed font-light">To provide a stimulating environment that encourages discovery, critical thinking, and character building.</p>
+            </div>
           </div>
         </div>
-        <div className="aspect-square rounded-[4rem] overflow-hidden shadow-2xl relative">
-          <img 
-            src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1000" 
-            alt="Students Studying" 
-            className="w-full h-full object-cover"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-emerald-900/10 mix-blend-multiply" />
+        <div className="lg:w-1/2 relative">
+          <div className="aspect-square rounded-[3rem] overflow-hidden shadow-2xl group">
+            <img 
+              src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1000" 
+              alt="Students collaborating" 
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+          <div className="absolute -bottom-8 -left-8 bg-emerald-600 text-white p-10 rounded-[2rem] shadow-2xl hidden md:block">
+            <p className="text-4xl font-bold tracking-tighter mb-1">15+</p>
+            <p className="text-[10px] uppercase tracking-widest font-bold opacity-80">Years of Impact</p>
+          </div>
         </div>
       </div>
 
@@ -1082,33 +1128,31 @@ const Gallery = () => {
     : items.filter(item => item.caption.toLowerCase().includes(filter.toLowerCase()) || filter === 'Campus');
 
   return (
-    <div className="pt-40 pb-32 bg-[#FDFCFB]">
+    <div className="pt-40 pb-32 bg-white">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-        <div className="text-center mb-24">
-          <span className="text-emerald-600 font-bold uppercase tracking-[0.2em] text-[10px] mb-4 block">Visual Archives</span>
-          <h1 className="text-6xl md:text-7xl font-bold text-slate-900 mb-8">School Gallery</h1>
-          <p className="text-slate-500 text-xl font-light max-w-2xl mx-auto leading-relaxed">Capturing the vibrant moments of joy, discovery, and achievement that define our community.</p>
-        </div>
-
-        <div className="flex flex-wrap justify-center gap-4 mb-20">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setFilter(cat)}
-              className={`px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${
-                filter === cat 
-                  ? 'bg-emerald-600 text-white shadow-xl shadow-emerald-900/20' 
-                  : 'bg-white text-slate-500 hover:bg-slate-50 border border-slate-100'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        <div className="flex flex-col lg:flex-row justify-between items-end mb-24 gap-8">
+          <div className="max-w-2xl">
+            <span className="text-emerald-600 font-bold uppercase tracking-[0.4em] text-[9px] mb-6 block">Visual Journey</span>
+            <h1 className="text-6xl md:text-8xl font-bold text-slate-900 leading-[0.9] tracking-tighter">Moments of <br /><span className="italic font-serif text-emerald-600">Growth.</span></h1>
+          </div>
+          <div className="flex flex-wrap gap-4">
+            {categories.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={`px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${
+                  filter === cat ? 'bg-slate-900 text-white shadow-xl' : 'bg-slate-50 text-slate-400 hover:bg-slate-100'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
 
         <motion.div 
           layout
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"
         >
           <AnimatePresence mode="popLayout">
             {filteredItems.map((item, i) => (
@@ -1119,16 +1163,15 @@ const Gallery = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.5, delay: i * 0.05 }}
-                whileHover={{ y: -15 }}
-                className="group aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative"
+                className="group relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl bg-slate-100"
               >
                 <img 
                   src={item.url} 
                   alt={item.caption} 
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110"
                   referrerPolicy="no-referrer"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-10">
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-10">
                   <p className="text-white font-serif text-2xl mb-2">{item.caption}</p>
                   <div className="w-12 h-1 bg-emerald-500 rounded-full" />
                 </div>
@@ -1171,13 +1214,15 @@ const Contact = () => {
   };
 
   return (
-    <div className="pt-40 pb-32">
+    <div className="pt-40 pb-32 bg-white">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
-          <div>
-            <span className="text-emerald-600 font-bold uppercase tracking-[0.2em] text-[10px] mb-4 block">Connect With Us</span>
-            <h1 className="text-6xl md:text-7xl font-bold text-slate-900 mb-10">Get in Touch</h1>
-            <p className="text-slate-500 mb-16 text-xl font-light leading-relaxed">We'd love to hear from you. Whether you have a question about admissions or just want to say hi, our team is here to help.</p>
+        <div className="flex flex-col lg:flex-row gap-24">
+          <div className="lg:w-1/2">
+            <span className="text-emerald-600 font-bold uppercase tracking-[0.4em] text-[9px] mb-8 block">Connect</span>
+            <h1 className="text-6xl md:text-8xl font-bold text-slate-900 mb-10 leading-[0.9] tracking-tighter">Get in <br /><span className="italic font-serif text-emerald-600">Touch.</span></h1>
+            <p className="text-slate-500 text-xl font-light leading-relaxed mb-16">
+              Whether you have questions about admissions or our curriculum, our team is here to guide you through the process.
+            </p>
             
             <div className="space-y-12">
               {[
@@ -1186,95 +1231,81 @@ const Contact = () => {
                 { icon: Mail, title: 'Email Addresses', content: 'info@babujischool.com', sub: 'admissions@babujischool.com' },
               ].map((item, i) => (
                 <div key={i} className="flex items-start space-x-8 group">
-                  <div className="bg-emerald-50 p-5 rounded-[1.5rem] text-emerald-600 shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all duration-500">
-                    <item.icon className="w-7 h-7" />
+                  <div className="bg-slate-50 p-6 rounded-[1.5rem] text-slate-900 shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all duration-500">
+                    <item.icon className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-slate-900 text-xl mb-2">{item.title}</h4>
+                    <h4 className="font-bold text-slate-900 text-xl mb-2 tracking-tight">{item.title}</h4>
                     <p className="text-slate-500 text-base leading-relaxed font-light">{item.content}</p>
-                    {item.sub && <p className="text-emerald-600 text-sm font-semibold mt-1">{item.sub}</p>}
+                    {item.sub && <p className="text-emerald-600 text-[10px] font-bold uppercase tracking-widest mt-2">{item.sub}</p>}
                   </div>
                 </div>
               ))}
             </div>
-
-            <div className="mt-20 aspect-video rounded-[3rem] overflow-hidden shadow-2xl relative group">
-              <img 
-                src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=1000" 
-                alt="Map Placeholder" 
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 bg-emerald-900/20 mix-blend-multiply group-hover:opacity-0 transition-opacity duration-1000" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-white/20 text-center">
-                  <MapPin className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
-                  <p className="font-bold text-slate-900">Sherkot, Bijnor</p>
-                  <p className="text-xs text-slate-500 uppercase tracking-widest">Find us here</p>
-                </div>
-              </div>
-            </div>
           </div>
-
-          <div className="bg-white p-16 rounded-[4rem] shadow-2xl border border-slate-100 relative">
-            <div className="absolute -top-6 -right-6 bg-emerald-600 text-white p-6 rounded-[2rem] shadow-xl">
-              <MessageSquare className="w-8 h-8" />
+          <div className="lg:w-1/2">
+            <div className="bg-slate-50 p-12 rounded-[3rem] border border-slate-100 shadow-sm relative">
+              <div className="absolute -top-6 -right-6 bg-slate-950 text-white p-6 rounded-[2rem] shadow-xl">
+                <MessageSquare className="w-8 h-8" />
+              </div>
+              <h3 className="text-3xl font-bold text-slate-900 mb-10 tracking-tighter">Send a Message</h3>
+              <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-[0.3em] ml-4">First Name</label>
+                    <input 
+                      type="text" 
+                      required
+                      value={formData.firstName}
+                      onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                      className="w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" 
+                      placeholder="John" 
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-[0.3em] ml-4">Last Name</label>
+                    <input 
+                      type="text" 
+                      required
+                      value={formData.lastName}
+                      onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                      className="w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" 
+                      placeholder="Doe" 
+                    />
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-[0.3em] ml-4">Email Address</label>
+                  <input 
+                    type="email" 
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    className="w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" 
+                    placeholder="john@example.com" 
+                  />
+                </div>
+                <div className="space-y-3">
+                  <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-[0.3em] ml-4">Your Message</label>
+                  <textarea 
+                    rows={5} 
+                    required
+                    value={formData.message}
+                    onChange={(e) => setFormData({...formData, message: e.target.value})}
+                    className="w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all resize-none" 
+                    placeholder="How can we help you?"
+                  ></textarea>
+                </div>
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="w-full bg-slate-950 text-white py-5 rounded-2xl font-bold hover:bg-emerald-600 transition-all shadow-2xl shadow-slate-900/10 flex items-center justify-center group disabled:opacity-50"
+                >
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
+                  <Send className="ml-2 w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                </button>
+              </form>
             </div>
-            <form onSubmit={handleSubmit} className="space-y-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">First Name</label>
-                  <input 
-                    type="text" 
-                    required
-                    value={formData.firstName}
-                    onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                    className="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-emerald-500 transition-all" 
-                    placeholder="John" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Last Name</label>
-                  <input 
-                    type="text" 
-                    required
-                    value={formData.lastName}
-                    onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                    className="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-emerald-500 transition-all" 
-                    placeholder="Doe" 
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Email Address</label>
-                <input 
-                  type="email" 
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-emerald-500 transition-all" 
-                  placeholder="john@example.com" 
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Your Message</label>
-                <textarea 
-                  rows={5} 
-                  required
-                  value={formData.message}
-                  onChange={(e) => setFormData({...formData, message: e.target.value})}
-                  className="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-emerald-500 transition-all" 
-                  placeholder="How can we help you?"
-                ></textarea>
-              </div>
-              <button 
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-slate-900 text-white py-5 rounded-2xl font-bold text-lg hover:bg-emerald-600 transition-all shadow-xl shadow-slate-900/10 disabled:opacity-50"
-              >
-                {isSubmitting ? 'Sending...' : 'Send Message'}
-              </button>
-            </form>
           </div>
         </div>
       </div>
